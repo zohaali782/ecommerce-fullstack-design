@@ -27,6 +27,14 @@ const categories = [
   "Machinery tools",
 ];
 
+const countryOptions = [
+  { code: "pk", name: "Pakistan" },
+  { code: "de", name: "Germany" },
+  { code: "us", name: "USA" },
+  { code: "ae", name: "UAE" },
+  { code: "gb", name: "UK" },
+];
+
 function StarRating({ rating, count }) {
   return (
     <div className="flex items-center gap-1">
@@ -60,8 +68,10 @@ export default function ProductDetailPage() {
   const [selectedColor, setSelectedColor] = useState(0);
   const [toast, setToast] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("pk");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
 
-  // ===== DATABASE SE FETCH =====
   useEffect(() => {
     setLoading(true);
     setSelectedImage(0);
@@ -94,7 +104,38 @@ export default function ProductDetailPage() {
     addToCart(product, quantity);
     navigate("/cart");
   };
+  const handleWishlist = async () => {
+    const token = localStorage.getItem("nexmart_token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
+    if (wishlist) {
+      // Remove from wishlist
+      await fetch(`http://localhost:5000/api/wishlist/${product._id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setWishlist(false);
+    } else {
+      // Add to wishlist
+      await fetch("http://localhost:5000/api/wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: product._id,
+          name: product.name,
+          image: product.image,
+          price: product.price,
+        }),
+      });
+      setWishlist(true);
+    }
+  };
   const handleSearch = () => {
     if (searchQuery.trim()) {
       navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
@@ -103,7 +144,6 @@ export default function ProductDetailPage() {
 
   const cartCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
 
-  // ===== LOADING =====
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -151,22 +191,25 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Toast */}
       {toast && (
-        <div className="fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
           ✅ Added to cart!
         </div>
       )}
 
       {/* ===== NAVBAR ===== */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-white border-b border-gray-200 relative">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-3 py-2.5">
+          <div className="flex flex-wrap items-center gap-3 py-2.5">
+            {/* Logo */}
             <Link to="/" className="flex items-center gap-2 shrink-0">
               <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm">
                 N
               </div>
               <span className="font-bold text-gray-800 text-lg">NexMart</span>
             </Link>
-            <div className="flex flex-1 max-w-xl">
+
+            {/* Search bar */}
+            <div className="flex flex-1 min-w-full sm:min-w-0 order-3 sm:order-none">
               <input
                 type="text"
                 placeholder="Search products..."
@@ -175,7 +218,7 @@ export default function ProductDetailPage() {
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 className="flex-1 border border-gray-300 rounded-l px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
               />
-              <select className="border-t border-b border-gray-300 px-2 text-xs text-gray-600 bg-gray-50">
+              <select className="hidden sm:block border-t border-b border-gray-300 px-2 text-xs text-gray-600 bg-gray-50">
                 <option value="">All category</option>
                 {categories.map((c) => (
                   <option key={c} value={c}>
@@ -185,29 +228,31 @@ export default function ProductDetailPage() {
               </select>
               <button
                 onClick={handleSearch}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-r text-sm font-medium"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-1.5 rounded-r text-sm font-medium shrink-0"
               >
                 Search
               </button>
             </div>
-            <div className="flex items-center gap-4 ml-auto">
+
+            {/* Icons */}
+            <div className="flex items-center gap-3 sm:gap-4 ml-auto">
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
               >
                 <FaUserAlt className="text-xl mb-1" />
                 <span className="text-[10px]">Profile</span>
               </Link>
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
               >
                 <FaRegCommentDots className="text-xl mb-1" />
                 <span className="text-[10px]">Message</span>
               </Link>
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
               >
                 <FaClipboardList className="text-xl mb-1" />
                 <span className="text-[10px]">Orders</span>
@@ -226,9 +271,31 @@ export default function ProductDetailPage() {
                 </div>
                 <span className="text-[10px]">My cart</span>
               </Link>
+              {/* Hamburger - mobile only */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="sm:hidden text-gray-600 p-1"
+                aria-label="Menu"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
-          <nav className="flex items-center justify-between py-1.5 border-t border-gray-100">
+
+          {/* Desktop nav row */}
+          <nav className="hidden md:flex items-center justify-between py-1.5 border-t border-gray-100">
             <div className="flex items-center gap-5">
               <Link
                 to="/products"
@@ -236,17 +303,24 @@ export default function ProductDetailPage() {
               >
                 ☰ All category
               </Link>
-              {["Hot offers", "Gift boxes", "Projects", "Menu item"].map(
-                (item) => (
-                  <a
-                    key={item}
-                    href="#"
-                    className="text-sm text-gray-600 hover:text-blue-600"
-                  >
-                    {item}
-                  </a>
-                ),
-              )}
+              <Link
+                to="/hot-offers"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
+                Hot offers
+              </Link>
+              <Link
+                to="/gift-boxes"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
+                Gift boxes
+              </Link>
+              <Link
+                to="/projects"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
+                Projects
+              </Link>
               <span className="text-sm text-gray-600 cursor-pointer">
                 Help ▾
               </span>
@@ -255,43 +329,134 @@ export default function ProductDetailPage() {
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="bg-transparent border-none outline-none cursor-pointer"
+                className="bg-transparent border-none outline-none cursor-pointer text-sm"
               >
                 <option value="USD">English, USD</option>
                 <option value="PKR">English, PKR</option>
                 <option value="EUR">English, EUR</option>
               </select>
-              <div className="flex items-center gap-1">
-                <span id="flagDisplayDP">🇵🇰</span>
-                <select
-                  className="bg-transparent border-none outline-none cursor-pointer"
-                  onChange={(e) => {
-                    const flags = {
-                      Pakistan: "🇵🇰",
-                      Germany: "🇩🇪",
-                      USA: "🇺🇸",
-                      UAE: "🇦🇪",
-                      UK: "🇬🇧",
-                    };
-                    document.getElementById("flagDisplayDP").textContent =
-                      flags[e.target.value];
-                  }}
+              {/* Ship to — custom dropdown, flag only */}
+              <div className="relative flex items-center gap-1.5">
+                <span className="text-sm text-gray-500">Ship to</span>
+                <button
+                  onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                  className="flex items-center gap-1 focus:outline-none"
                 >
-                  <option>Pakistan</option>
-                  <option>Germany</option>
-                  <option>USA</option>
-                  <option>UAE</option>
-                  <option>UK</option>
-                </select>
+                  <img
+                    src={`https://flagcdn.com/w20/${selectedCountry}.png`}
+                    alt="flag"
+                    className="w-5 h-3.5 object-cover rounded-sm"
+                  />
+                  <svg
+                    className="w-3 h-3 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                {showCountryDropdown && (
+                  <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50 py-1 min-w-[130px]">
+                    {countryOptions.map((c) => (
+                      <button
+                        key={c.code}
+                        onClick={() => {
+                          setSelectedCountry(c.code);
+                          setShowCountryDropdown(false);
+                        }}
+                        className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600" : ""}`}
+                      >
+                        <img
+                          src={`https://flagcdn.com/w20/${c.code}.png`}
+                          alt={c.name}
+                          className="w-5 h-3.5 object-cover rounded-sm"
+                        />
+                        {c.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </nav>
+
+          {/* Mobile dropdown menu */}
+          {mobileMenuOpen && (
+            <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
+              <Link
+                to="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-sm text-gray-700 font-medium py-2.5 border-b border-gray-100"
+              >
+                <span>☰</span> All category
+              </Link>
+              {[
+                { label: "Hot offers", to: "/hot-offers" },
+                { label: "Gift boxes", to: "/gift-boxes" },
+                { label: "Projects", to: "/projects" },
+                { label: "Profile", to: "/profile" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between text-sm text-gray-600 py-2.5 border-b border-gray-100 hover:text-blue-600"
+                >
+                  {item.label}
+                  <span className="text-gray-300">›</span>
+                </Link>
+              ))}
+              <div className="py-3 border-b border-gray-100">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white"
+                >
+                  <option value="USD">English, USD</option>
+                  <option value="PKR">English, PKR</option>
+                  <option value="EUR">English, EUR</option>
+                </select>
+              </div>
+              <div className="py-3">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Ship to
+                </label>
+                <div className="flex items-center gap-2 border border-gray-300 rounded px-3 py-2 bg-white">
+                  <img
+                    src={`https://flagcdn.com/w20/${selectedCountry}.png`}
+                    alt="flag"
+                    className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                  />
+                  <select
+                    value={selectedCountry}
+                    onChange={(e) => setSelectedCountry(e.target.value)}
+                    className="flex-1 text-sm text-gray-700 bg-white outline-none"
+                  >
+                    {countryOptions.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-2 w-full">
-        <div className="flex items-center gap-1 text-xs text-gray-500">
+        <div className="flex items-center gap-1 text-xs text-gray-500 flex-wrap">
           <Link to="/" className="hover:text-blue-600">
             Home
           </Link>
@@ -308,10 +473,10 @@ export default function ProductDetailPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 pb-8 w-full">
-        {/* ===== MAIN PRODUCT ===== */}
-        <div className="flex gap-4 mb-4">
+        {/* ===== MAIN PRODUCT — responsive layout ===== */}
+        <div className="flex flex-col md:flex-row gap-4 mb-4">
           {/* Left — Images */}
-          <div className="w-72 shrink-0">
+          <div className="w-full md:w-72 shrink-0">
             <div className="flex items-center gap-1 mb-2">
               <span
                 className={`w-2 h-2 rounded-full inline-block ${product.stock > 0 ? "bg-green-500" : "bg-red-500"}`}
@@ -324,7 +489,7 @@ export default function ProductDetailPage() {
                   : "Out of stock"}
               </span>
             </div>
-            <div className="border border-gray-200 rounded overflow-hidden mb-2 bg-white h-64">
+            <div className="border border-gray-200 rounded overflow-hidden mb-2 bg-white h-64 md:h-64">
               <img
                 src={productImages[selectedImage]}
                 alt={product.name}
@@ -362,7 +527,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Price tiers */}
-            <div className="flex items-center gap-4 bg-orange-50 border border-orange-100 rounded p-3 mb-4">
+            <div className="flex items-center gap-4 bg-orange-50 border border-orange-100 rounded p-3 mb-4 flex-wrap">
               {prices.map((p, i) => (
                 <div key={i} className="text-center">
                   <p
@@ -425,7 +590,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Right — Actions */}
-          <div className="w-52 shrink-0">
+          <div className="w-full md:w-52 shrink-0">
             <div className="bg-white border border-gray-200 rounded p-3 mb-3">
               <div className="flex items-center gap-2 mb-2">
                 <div className="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
@@ -464,7 +629,7 @@ export default function ProductDetailPage() {
             </div>
 
             <button
-              onClick={() => setWishlist(!wishlist)}
+              onClick={handleWishlist}
               className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-red-500 transition-colors mb-3"
             >
               {wishlist ? (
@@ -524,14 +689,14 @@ export default function ProductDetailPage() {
         </div>
 
         {/* ===== TABS ===== */}
-        <div className="flex gap-4 mb-4">
+        <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="flex-1 bg-white border border-gray-200 rounded overflow-hidden">
-            <div className="flex border-b border-gray-200">
+            <div className="flex border-b border-gray-200 overflow-x-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-5 py-3 text-xs font-medium transition-colors ${activeTab === tab ? "border-b-2 border-blue-600 text-blue-600 bg-blue-50" : "text-gray-600 hover:bg-gray-50"}`}
+                  className={`px-4 py-3 text-xs font-medium transition-colors whitespace-nowrap ${activeTab === tab ? "border-b-2 border-blue-600 text-blue-600 bg-blue-50" : "text-gray-600 hover:bg-gray-50"}`}
                 >
                   {tab}
                 </button>
@@ -599,7 +764,7 @@ export default function ProductDetailPage() {
           </div>
 
           {/* You may like */}
-          <div className="w-52 shrink-0">
+          <div className="w-full md:w-52 shrink-0">
             <div className="bg-white border border-gray-200 rounded p-3">
               <h3 className="text-sm font-semibold text-gray-800 mb-3">
                 You may like
@@ -636,7 +801,7 @@ export default function ProductDetailPage() {
           <h2 className="text-base font-bold text-gray-800 mb-3">
             Related products
           </h2>
-          <div className="grid grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {relatedProducts.map((item) => (
               <Link
                 key={item._id}
@@ -662,7 +827,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* Promo Banner */}
-        <div className="bg-blue-600 rounded p-4 flex items-center justify-between">
+        <div className="bg-blue-600 rounded p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
             <p className="text-white font-bold text-sm">
               Super discount on more than 100 USD
@@ -673,7 +838,7 @@ export default function ProductDetailPage() {
           </div>
           <Link
             to="/products"
-            className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-5 py-2 rounded"
+            className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold px-5 py-2 rounded shrink-0"
           >
             Shop now
           </Link>
@@ -681,10 +846,10 @@ export default function ProductDetailPage() {
       </div>
 
       {/* ===== FOOTER ===== */}
-      <footer className="bg-white border-t border-gray-200 mt-auto">
+      <footer className="bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-5 gap-6">
-            <div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+            <div className="col-span-2 sm:col-span-3 md:col-span-1">
               <div className="flex items-center gap-2 mb-2">
                 <div className="bg-blue-600 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm">
                   N
@@ -744,23 +909,60 @@ export default function ProductDetailPage() {
                 ))}
               </div>
             ))}
-          </div>
-          <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-            <p className="text-xs text-gray-400">© 2026 NexMart.</p>
-            <div className="flex gap-2">
-              <a
-                href="#"
-                className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-              >
-                🍎 App Store
-              </a>
-              <a
-                href="#"
-                className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-              >
-                ▶ Google Play
-              </a>
+            <div className="col-span-2 sm:col-span-1">
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                Get app
+              </h4>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      Download on the
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      App Store
+                    </span>
+                  </div>
+                </a>
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M3.18 23.76c.3.17.64.24.99.2l13.29-7.67-2.83-2.83-11.45 10.3zM.54 1.18C.2 1.56 0 2.14 0 2.89v18.22c0 .75.2 1.33.54 1.71l.09.08 10.21-10.21v-.24L.63 1.1l-.09.08zM20.94 10.8l-2.82-1.63-3.17 3.17 3.17 3.17 2.85-1.65c.81-.47.81-1.23-.03-1.7v.04zM4.17.24L17.46 7.9l-2.83 2.83L3.18.47c.35-.38.71-.41.99-.23z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      GET IT ON
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      Google Play
+                    </span>
+                  </div>
+                </a>
+              </div>
             </div>
+          </div>
+          <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
               🇺🇸 English ▾
             </div>

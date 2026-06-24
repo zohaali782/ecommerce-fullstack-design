@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const inquirySchema = new mongoose.Schema(
   {
-    projectId: { type: String, required: true },
+    projectId: { type: String },
     projectTitle: { type: String },
     name: { type: String, required: true },
     company: { type: String },

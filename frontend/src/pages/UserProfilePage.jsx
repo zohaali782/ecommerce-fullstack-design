@@ -16,6 +16,7 @@ import {
   FaCheckCircle,
   FaTimesCircle,
   FaClock,
+  FaTrash,
 } from "react-icons/fa";
 
 const categories = [
@@ -27,37 +28,6 @@ const categories = [
   "Sports and outdoor",
   "Animal and pets",
   "Machinery tools",
-];
-
-const wishlistItems = [
-  {
-    id: 1,
-    name: "GoPro HERO6 4K Action Camera",
-    price: 299.0,
-    image:
-      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=200&q=80",
-  },
-  {
-    id: 2,
-    name: "Laptop Pro 15 inch, 16GB RAM",
-    price: 1199.0,
-    image:
-      "https://images.unsplash.com/photo-1611186871525-9b3e3a9e6dd2?w=200&q=80",
-  },
-  {
-    id: 3,
-    name: "Wireless Earbuds Premium",
-    price: 149.0,
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&q=80",
-  },
-  {
-    id: 4,
-    name: "Samsung Galaxy Smartphone",
-    price: 799.0,
-    image:
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=200&q=80",
-  },
 ];
 
 const statusConfig = {
@@ -184,9 +154,9 @@ function Navbar() {
 
 function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-200 mt-6">
+    <footer className="bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-5 gap-6">
+        <div className="grid grid-cols-6 gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <div className="bg-blue-600 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm">
@@ -195,8 +165,7 @@ function Footer() {
               <span className="font-bold text-blue-600 text-lg">NexMart</span>
             </div>
             <p className="text-xs text-gray-500 mb-3">
-              Best information about the company goes here but now lorem ipsum
-              is
+              Best information about the company goes here.
             </p>
             <div className="flex gap-2">
               {["f", "t", "in", "be", "yt"].map((s) => (
@@ -236,32 +205,57 @@ function Footer() {
                 <a
                   key={link}
                   href="#"
-                  className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5 transition-colors"
+                  className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
                 >
                   {link}
                 </a>
               ))}
             </div>
           ))}
+          <div>
+            <h4 className="text-sm font-semibold text-gray-800 mb-2">
+              Get app
+            </h4>
+            <div className="flex flex-col gap-2">
+              <a
+                href="#"
+                className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                </svg>
+                <div className="flex flex-col">
+                  <span className="text-[9px] opacity-75 leading-tight">
+                    Download on the
+                  </span>
+                  <span className="text-xs font-semibold leading-tight">
+                    App Store
+                  </span>
+                </div>
+              </a>
+              <a
+                href="#"
+                className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path d="M3.18 23.76c.3.17.64.24.99.2l13.29-7.67-2.83-2.83-11.45 10.3zM.54 1.18C.2 1.56 0 2.14 0 2.89v18.22c0 .75.2 1.33.54 1.71l.09.08 10.21-10.21v-.24L.63 1.1l-.09.08zM20.94 10.8l-2.82-1.63-3.17 3.17 3.17 3.17 2.85-1.65c.81-.47.81-1.23-.03-1.7v.04zM4.17.24L17.46 7.9l-2.83 2.83L3.18.47c.35-.38.71-.41.99-.23z" />
+                </svg>
+                <div className="flex flex-col">
+                  <span className="text-[9px] opacity-75 leading-tight">
+                    GET IT ON
+                  </span>
+                  <span className="text-xs font-semibold leading-tight">
+                    Google Play
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
         <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
           <p className="text-xs text-gray-400">© 2026 NexMart.</p>
-          <div className="flex gap-2">
-            <a
-              href="#"
-              className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-            >
-              <span>🍎</span> App Store
-            </a>
-            <a
-              href="#"
-              className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-            >
-              <span>▶</span> Google Play
-            </a>
-          </div>
           <div className="flex items-center gap-1 text-xs text-gray-500">
-            🇺🇸 English <span>▾</span>
+            🇺🇸 English ▾
           </div>
         </div>
       </div>
@@ -269,10 +263,102 @@ function Footer() {
   );
 }
 
+// ─── Add Address Modal ───────────────────────────────────────────────
+function AddAddressModal({ onClose, onSave }) {
+  const [form, setForm] = useState({
+    type: "Home",
+    name: "",
+    phone: "",
+    address: "",
+    city: "",
+    country: "Pakistan",
+    isDefault: false,
+  });
+
+  const handleSubmit = () => {
+    if (!form.name || !form.address || !form.phone)
+      return alert("Please fill required fields");
+    onSave(form);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 w-full max-w-md shadow-lg">
+        <h3 className="text-sm font-bold text-gray-800 mb-4">
+          Add New Address
+        </h3>
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">
+              Address Type
+            </label>
+            <select
+              value={form.type}
+              onChange={(e) => setForm({ ...form, type: e.target.value })}
+              className="w-full border border-gray-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-blue-400"
+            >
+              <option>Home</option>
+              <option>Office</option>
+              <option>Other</option>
+            </select>
+          </div>
+          {[
+            { label: "Full Name *", key: "name" },
+            { label: "Phone *", key: "phone" },
+            { label: "Address *", key: "address" },
+            { label: "City", key: "city" },
+            { label: "Country", key: "country" },
+          ].map((f) => (
+            <div key={f.key}>
+              <label className="block text-xs text-gray-400 mb-1">
+                {f.label}
+              </label>
+              <input
+                type="text"
+                value={form[f.key]}
+                onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+                className="w-full border border-gray-200 rounded px-3 py-2 text-xs focus:outline-none focus:border-blue-400"
+              />
+            </div>
+          ))}
+          <label className="flex items-center gap-2 text-xs text-gray-600 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.isDefault}
+              onChange={(e) =>
+                setForm({ ...form, isDefault: e.target.checked })
+              }
+            />
+            Set as default address
+          </label>
+        </div>
+        <div className="flex gap-2 mt-4">
+          <button
+            onClick={handleSubmit}
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded transition-colors"
+          >
+            Save Address
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 border border-gray-200 text-gray-600 text-xs py-2 rounded hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Component ──────────────────────────────────────────────────
 export default function UserProfilePage() {
   const [activeTab, setActiveTab] = useState("orders");
   const [editMode, setEditMode] = useState(false);
   const [realOrders, setRealOrders] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -284,18 +370,77 @@ export default function UserProfilePage() {
     country: "Pakistan",
     address: "House 12, Street 5, Karachi",
   });
-
   useEffect(() => {
-    if (user) {
-      const token = localStorage.getItem("nexmart_token");
-      fetch(`http://localhost:5000/api/orders/user/${user.id || user._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => res.json())
-        .then((data) => setRealOrders(Array.isArray(data) ? data : []))
-        .catch((err) => console.error(err));
+    if (!user) return;
+
+    const token = localStorage.getItem("nexmart_token");
+    if (!token) {
+      logout();
+      navigate("/login");
+      return;
     }
-  }, [user]);
+
+    const authFetch = async (url, setter) => {
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Token expired → logout and redirect
+      if (res.status === 401) {
+        const err = await res.json();
+        if (err.expired) {
+          logout();
+          navigate("/login");
+        }
+        return;
+      }
+
+      const data = await res.json();
+      setter(Array.isArray(data) ? data : []);
+    };
+
+    authFetch(
+      `http://localhost:5000/api/orders/user/${user.id || user._id}`,
+      setRealOrders,
+    );
+    authFetch("http://localhost:5000/api/wishlist", setWishlist);
+    authFetch("http://localhost:5000/api/address", setAddresses);
+  }, [user, logout, navigate]);
+  // Remove from wishlist
+  const removeFromWishlist = async (productId) => {
+    const token = localStorage.getItem("nexmart_token");
+    await fetch(`http://localhost:5000/api/wishlist/${productId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setWishlist((prev) => prev.filter((i) => i.productId !== productId));
+  };
+
+  // Add address
+  const handleAddAddress = async (form) => {
+    const token = localStorage.getItem("nexmart_token");
+    const res = await fetch("http://localhost:5000/api/address", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(form),
+    });
+    const data = await res.json();
+    setAddresses(Array.isArray(data) ? data : []);
+    setShowAddModal(false);
+  };
+
+  // Delete address
+  const handleDeleteAddress = async (id) => {
+    const token = localStorage.getItem("nexmart_token");
+    await fetch(`http://localhost:5000/api/address/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setAddresses((prev) => prev.filter((a) => a._id !== id));
+  };
 
   const sidebarLinks = [
     { key: "orders", icon: <FaBoxOpen />, label: "My Orders" },
@@ -307,6 +452,13 @@ export default function UserProfilePage() {
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
       <Navbar />
+
+      {showAddModal && (
+        <AddAddressModal
+          onClose={() => setShowAddModal(false)}
+          onSave={handleAddAddress}
+        />
+      )}
 
       <div className="max-w-7xl mx-auto px-4 py-5">
         <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
@@ -371,7 +523,6 @@ export default function UserProfilePage() {
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-sm font-bold text-gray-800">My Orders</h2>
                 </div>
-
                 <div className="space-y-3">
                   {realOrders.length > 0 ? (
                     realOrders.map((order) => {
@@ -410,8 +561,6 @@ export default function UserProfilePage() {
                               </p>
                             </div>
                           </div>
-
-                          {/* ===== Real Items with Images ===== */}
                           <div className="space-y-2 mb-3">
                             {order.items.map((item, i) => (
                               <div key={i} className="flex items-center gap-3">
@@ -440,9 +589,7 @@ export default function UserProfilePage() {
                               </div>
                             ))}
                           </div>
-
                           <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
-                            {/* ===== View Details — real order data bhejo ===== */}
                             <button
                               onClick={() => {
                                 const orderData = {
@@ -492,42 +639,61 @@ export default function UserProfilePage() {
                 </div>
               </div>
             )}
+
             {/* WISHLIST */}
             {activeTab === "wishlist" && (
               <div>
                 <h2 className="text-sm font-bold text-gray-800 mb-3">
-                  My Wishlist ({wishlistItems.length})
+                  My Wishlist ({wishlist.length})
                 </h2>
-                <div className="grid grid-cols-4 gap-3">
-                  {wishlistItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="bg-white rounded border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow"
+                {wishlist.length > 0 ? (
+                  <div className="grid grid-cols-4 gap-3">
+                    {wishlist.map((item) => (
+                      <div
+                        key={item.productId}
+                        className="bg-white rounded border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow"
+                      >
+                        <div className="relative">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                          <button
+                            onClick={() => removeFromWishlist(item.productId)}
+                            className="absolute top-2 right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center text-red-500 shadow-sm hover:bg-red-50 transition-colors"
+                          >
+                            <FaHeart className="text-xs" />
+                          </button>
+                        </div>
+                        <div className="p-3">
+                          <p className="text-sm font-bold text-gray-800 mb-0.5">
+                            ${item.price.toFixed(2)}
+                          </p>
+                          <p className="text-xs text-gray-500 line-clamp-2 mb-2 leading-tight">
+                            {item.name}
+                          </p>
+                          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition-colors">
+                            Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded border border-gray-200 p-8 text-center">
+                    <FaHeart className="text-gray-300 text-4xl mx-auto mb-2" />
+                    <p className="text-gray-400 text-sm">
+                      Your wishlist is empty!
+                    </p>
+                    <Link
+                      to="/"
+                      className="text-blue-600 text-xs hover:underline mt-1 inline-block"
                     >
-                      <div className="relative">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <button className="absolute top-2 right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center text-red-500 shadow-sm hover:bg-red-50 transition-colors">
-                          <FaHeart className="text-xs" />
-                        </button>
-                      </div>
-                      <div className="p-3">
-                        <p className="text-sm font-bold text-gray-800 mb-0.5">
-                          ${item.price.toFixed(2)}
-                        </p>
-                        <p className="text-xs text-gray-500 line-clamp-2 mb-2 leading-tight">
-                          {item.name}
-                        </p>
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition-colors">
-                          Add to Cart
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                      Explore Products
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
 
@@ -538,59 +704,60 @@ export default function UserProfilePage() {
                   <h2 className="text-sm font-bold text-gray-800">
                     My Addresses
                   </h2>
-                  <button className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors">
+                  <button
+                    onClick={() => setShowAddModal(true)}
+                    className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
+                  >
                     + Add New Address
                   </button>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    {
-                      type: "Home",
-                      name: user?.name || "User",
-                      address:
-                        "House 12, Street 5, Karachi, Sindh 75500, Pakistan",
-                      phone: "+92 300 0000000",
-                      default: true,
-                    },
-                    {
-                      type: "Office",
-                      name: user?.name || "User",
-                      address:
-                        "Office 5, Tech Park, Clifton, Karachi 75600, Pakistan",
-                      phone: "+92 321 1234567",
-                      default: false,
-                    },
-                  ].map((addr, i) => (
-                    <div
-                      key={i}
-                      className="bg-white rounded border border-gray-200 p-4"
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <FaMapMarkerAlt className="text-blue-500 text-sm" />
-                          <span className="text-xs font-bold text-gray-800">
-                            {addr.type}
-                          </span>
-                          {addr.default && (
-                            <span className="bg-blue-100 text-blue-600 text-[10px] font-semibold px-1.5 py-0.5 rounded">
-                              Default
+                {addresses.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    {addresses.map((addr) => (
+                      <div
+                        key={addr._id}
+                        className="bg-white rounded border border-gray-200 p-4"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <FaMapMarkerAlt className="text-blue-500 text-sm" />
+                            <span className="text-xs font-bold text-gray-800">
+                              {addr.type}
                             </span>
-                          )}
+                            {addr.isDefault && (
+                              <span className="bg-blue-100 text-blue-600 text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                                Default
+                              </span>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleDeleteAddress(addr._id)}
+                            className="text-gray-300 hover:text-red-500 transition-colors"
+                          >
+                            <FaTrash className="text-xs" />
+                          </button>
                         </div>
-                        <button className="text-gray-400 hover:text-blue-600 transition-colors">
-                          <FaEdit className="text-sm" />
-                        </button>
+                        <p className="text-xs font-medium text-gray-700 mb-1">
+                          {addr.name}
+                        </p>
+                        <p className="text-xs text-gray-500 leading-relaxed mb-1">
+                          {addr.address}, {addr.city}, {addr.country}
+                        </p>
+                        <p className="text-xs text-gray-500">{addr.phone}</p>
                       </div>
-                      <p className="text-xs font-medium text-gray-700 mb-1">
-                        {addr.name}
-                      </p>
-                      <p className="text-xs text-gray-500 leading-relaxed mb-1">
-                        {addr.address}
-                      </p>
-                      <p className="text-xs text-gray-500">{addr.phone}</p>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded border border-gray-200 p-8 text-center">
+                    <FaMapMarkerAlt className="text-gray-300 text-4xl mx-auto mb-2" />
+                    <p className="text-gray-400 text-sm">
+                      No saved addresses yet!
+                    </p>
+                    <p className="text-gray-300 text-xs mt-1">
+                      Click "+ Add New Address" to save one.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 

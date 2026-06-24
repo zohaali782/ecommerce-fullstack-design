@@ -23,6 +23,7 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async () => {
+    if (loading) return; // hard guard against any double-invoke
     if (!password) {
       setError("Please enter your password");
       return;
@@ -43,8 +44,8 @@ export default function LoginPage() {
       navigate("/");
     } catch (err) {
       setError(err.message || "Something went wrong");
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const switchMode = () => {
@@ -59,14 +60,16 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-8 py-3 flex items-center justify-between">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-8 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm">
+          <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm shrink-0">
             N
           </div>
-          <span className="font-bold text-blue-600 text-xl">NexMart</span>
+          <span className="font-bold text-blue-600 text-lg sm:text-xl">
+            NexMart
+          </span>
         </Link>
-        <select className="border border-gray-200 rounded px-3 py-1.5 text-sm text-gray-600 focus:outline-none">
+        <select className="border border-gray-200 rounded px-2 sm:px-3 py-1.5 text-xs sm:text-sm text-gray-600 focus:outline-none">
           <option>English</option>
           <option>Urdu</option>
           <option>Arabic</option>
@@ -82,13 +85,60 @@ export default function LoginPage() {
           <div className="absolute bottom-10 right-10 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl" />
 
           <div className="relative z-10 text-center px-12">
-            {/* Illustration */}
+            {/* Illustration — abstract shopping bag + sparkle, no stock photo */}
             <div className="mb-8 flex justify-center">
-              <img
-                src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80"
-                alt="Shopping"
-                className="w-72 h-72 object-cover rounded-2xl shadow-2xl opacity-90"
-              />
+              <svg
+                width="220"
+                height="220"
+                viewBox="0 0 220 220"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* soft glow circle behind */}
+                <circle cx="110" cy="110" r="95" fill="white" opacity="0.07" />
+                {/* shopping bag body */}
+                <rect
+                  x="58"
+                  y="86"
+                  width="104"
+                  height="92"
+                  rx="10"
+                  fill="white"
+                  opacity="0.95"
+                />
+                {/* bag handle */}
+                <path
+                  d="M82 86 V68 a28 28 0 0 1 56 0 V86"
+                  stroke="#1d4ed8"
+                  strokeWidth="7"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                {/* fold line on bag */}
+                <line
+                  x1="58"
+                  y1="108"
+                  x2="162"
+                  y2="108"
+                  stroke="#bfdbfe"
+                  strokeWidth="3"
+                />
+                {/* price tag check */}
+                <circle cx="110" cy="142" r="20" fill="#fb923c" />
+                <path
+                  d="M101 142 l6 6 12 -14"
+                  stroke="white"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
+                {/* floating sparkles */}
+                <circle cx="44" cy="56" r="5" fill="white" opacity="0.8" />
+                <circle cx="178" cy="64" r="3.5" fill="white" opacity="0.6" />
+                <circle cx="184" cy="146" r="4.5" fill="white" opacity="0.7" />
+                <circle cx="36" cy="158" r="3" fill="white" opacity="0.5" />
+              </svg>
             </div>
             <h2 className="text-white text-2xl font-bold mb-3 leading-snug">
               Global shopping with
@@ -106,12 +156,113 @@ export default function LoginPage() {
             {/* Features */}
             <div className="flex justify-center gap-6 mt-8">
               {[
-                { icon: "🛡️", text: "Secure payments" },
-                { icon: "🚚", text: "Fast delivery" },
-                { icon: "✅", text: "Verified sellers" },
+                {
+                  text: "Secure payments",
+                  icon: (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 2.5l7.5 3v6c0 5-3.2 8-7.5 9.5-4.3-1.5-7.5-4.5-7.5-9.5v-6l7.5-3z"
+                        stroke="white"
+                        strokeWidth="1.6"
+                        strokeLinejoin="round"
+                        fill="white"
+                        fillOpacity="0.15"
+                      />
+                      <path
+                        d="M9 12l2.2 2.2L15.5 9.5"
+                        stroke="white"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ),
+                },
+                {
+                  text: "Fast delivery",
+                  icon: (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M3 7h10v8H3z"
+                        stroke="white"
+                        strokeWidth="1.6"
+                        strokeLinejoin="round"
+                        fill="white"
+                        fillOpacity="0.15"
+                      />
+                      <path
+                        d="M13 10h4l3 3v2h-7z"
+                        stroke="white"
+                        strokeWidth="1.6"
+                        strokeLinejoin="round"
+                        fill="white"
+                        fillOpacity="0.15"
+                      />
+                      <circle
+                        cx="7"
+                        cy="17.5"
+                        r="1.6"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        fill="#1d4ed8"
+                      />
+                      <circle
+                        cx="17"
+                        cy="17.5"
+                        r="1.6"
+                        stroke="white"
+                        strokeWidth="1.5"
+                        fill="#1d4ed8"
+                      />
+                    </svg>
+                  ),
+                },
+                {
+                  text: "Verified sellers",
+                  icon: (
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 2.5l2.4 1.4 2.8-.3 1.1 2.6 2.6 1.1-.3 2.8 1.4 2.4-1.4 2.4.3 2.8-2.6 1.1-1.1 2.6-2.8-.3L12 22.9l-2.4-1.4-2.8.3-1.1-2.6-2.6-1.1.3-2.8L2 12l1.4-2.4-.3-2.8 2.6-1.1L6.8 3.1l2.8.3z"
+                        stroke="white"
+                        strokeWidth="1.4"
+                        strokeLinejoin="round"
+                        fill="white"
+                        fillOpacity="0.15"
+                      />
+                      <path
+                        d="M8.5 12l2.3 2.3L15.8 9"
+                        stroke="white"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ),
+                },
               ].map((f) => (
-                <div key={f.text} className="flex flex-col items-center gap-1">
-                  <span className="text-2xl">{f.icon}</span>
+                <div
+                  key={f.text}
+                  className="flex flex-col items-center gap-1.5"
+                >
+                  {f.icon}
                   <span className="text-white/80 text-xs">{f.text}</span>
                 </div>
               ))}
@@ -120,10 +271,10 @@ export default function LoginPage() {
         </div>
 
         {/* Right — Form */}
-        <div className="flex-1 lg:max-w-md flex items-center justify-center px-8 py-10 bg-white">
+        <div className="flex-1 lg:max-w-md flex items-center justify-center px-4 sm:px-8 py-8 sm:py-10 bg-white">
           <div className="w-full max-w-sm">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">
-              {isLogin ? "Sign in or create account" : "Create your account"}
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
+              {isLogin ? "Sign in to your account" : "Create your account"}
             </h1>
             <p className="text-sm text-gray-500 mb-6">
               {isLogin
@@ -131,51 +282,9 @@ export default function LoginPage() {
                 : "Join millions of shoppers on NexMart"}
             </p>
 
-            {/* Social buttons */}
+            {/* Step 1 — Email */}
             {step === 1 && (
               <>
-                <div className="space-y-3 mb-5">
-                  {[
-                    {
-                      icon: "G",
-                      label: "Continue with Google",
-                      color: "text-red-500",
-                      bg: "hover:bg-red-50",
-                    },
-                    {
-                      icon: "f",
-                      label: "Continue with Facebook",
-                      color: "text-blue-600",
-                      bg: "hover:bg-blue-50",
-                    },
-                    {
-                      icon: "in",
-                      label: "Continue with LinkedIn",
-                      color: "text-blue-700",
-                      bg: "hover:bg-blue-50",
-                    },
-                  ].map((btn) => (
-                    <button
-                      key={btn.label}
-                      className={`w-full flex items-center gap-4 border border-gray-300 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 ${btn.bg} transition-colors`}
-                    >
-                      <span
-                        className={`font-bold text-base w-6 text-center ${btn.color}`}
-                      >
-                        {btn.icon}
-                      </span>
-                      {btn.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="flex-1 h-px bg-gray-200" />
-                  <span className="text-xs text-gray-400 font-medium">OR</span>
-                  <div className="flex-1 h-px bg-gray-200" />
-                </div>
-
-                {/* Email input */}
                 <input
                   type="email"
                   placeholder="Enter your email address"
@@ -183,9 +292,13 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleContinue()}
+                  autoFocus
+                  autoComplete="off"
+                  name="login-email-field"
                 />
                 {error && <p className="text-red-500 text-xs mb-2">{error}</p>}
                 <button
+                  type="button"
                   onClick={handleContinue}
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition-colors text-sm"
                 >
@@ -198,10 +311,13 @@ export default function LoginPage() {
             {step === 2 && (
               <>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 mb-4 flex items-center justify-between">
-                  <span className="text-sm text-gray-700">{email}</span>
+                  <span className="text-sm text-gray-700 truncate">
+                    {email}
+                  </span>
                   <button
+                    type="button"
                     onClick={() => setStep(1)}
-                    className="text-blue-600 text-xs hover:underline"
+                    className="text-blue-600 text-xs hover:underline shrink-0 ml-2"
                   >
                     Change
                   </button>
@@ -214,6 +330,9 @@ export default function LoginPage() {
                     className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-200 mb-3"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    autoFocus
+                    autoComplete="off"
+                    name="signup-name-field"
                   />
                 )}
 
@@ -226,6 +345,9 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                  autoFocus={isLogin}
+                  autoComplete="new-password"
+                  name="account-password-field"
                 />
 
                 {isLogin && (
@@ -242,6 +364,7 @@ export default function LoginPage() {
                 {error && <p className="text-red-500 text-xs mb-2">{error}</p>}
 
                 <button
+                  type="button"
                   onClick={handleSubmit}
                   disabled={loading}
                   className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 rounded-lg transition-colors text-sm"
@@ -261,6 +384,7 @@ export default function LoginPage() {
                 ? "Don't have an account? "
                 : "Already have an account? "}
               <button
+                type="button"
                 onClick={switchMode}
                 className="text-blue-600 font-semibold hover:underline"
               >
@@ -282,11 +406,12 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Footer */}
+      {/* FOOTER — matches HomePage.jsx */}
       <footer className="bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-5 gap-6">
-            <div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+            {/* Brand */}
+            <div className="col-span-2 sm:col-span-3 md:col-span-1">
               <div className="flex items-center gap-2 mb-2">
                 <div className="bg-blue-600 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm">
                   N
@@ -294,8 +419,7 @@ export default function LoginPage() {
                 <span className="font-bold text-blue-600 text-lg">NexMart</span>
               </div>
               <p className="text-xs text-gray-500 mb-3">
-                Best information about the company goes here but now lorem ipsum
-                is
+                Best information about the company goes here.
               </p>
               <div className="flex gap-2">
                 {["f", "t", "in", "be", "yt"].map((s) => (
@@ -309,6 +433,8 @@ export default function LoginPage() {
                 ))}
               </div>
             </div>
+
+            {/* Nav Columns */}
             {[
               {
                 title: "About",
@@ -340,32 +466,71 @@ export default function LoginPage() {
                   <a
                     key={link}
                     href="#"
-                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5 transition-colors"
+                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
                   >
                     {link}
                   </a>
                 ))}
               </div>
             ))}
-          </div>
-          <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-            <p className="text-xs text-gray-400">
-              © 2026 NexMart. All rights reserved.
-            </p>
-            <div className="flex gap-2">
-              <a
-                href="#"
-                className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-              >
-                🍎 App Store
-              </a>
-              <a
-                href="#"
-                className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-              >
-                ▶ Google Play
-              </a>
+
+            {/* Get App */}
+            <div className="col-span-2 sm:col-span-1">
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                Get app
+              </h4>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      Download on the
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      App Store
+                    </span>
+                  </div>
+                </a>
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M3.18 23.76c.3.17.64.24.99.2l13.29-7.67-2.83-2.83-11.45 10.3zM.54 1.18C.2 1.56 0 2.14 0 2.89v18.22c0 .75.2 1.33.54 1.71l.09.08 10.21-10.21v-.24L.63 1.1l-.09.08zM20.94 10.8l-2.82-1.63-3.17 3.17 3.17 3.17 2.85-1.65c.81-.47.81-1.23-.03-1.7v.04zM4.17.24L17.46 7.9l-2.83 2.83L3.18.47c.35-.38.71-.41.99-.23z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      GET IT ON
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      Google Play
+                    </span>
+                  </div>
+                </a>
+              </div>
             </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
               🇺🇸 English ▾
             </div>
