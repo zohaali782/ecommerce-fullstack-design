@@ -13,7 +13,48 @@ const navCategories = [
   "Animal and pets",
   "Machinery tools",
 ];
+function FlagUSIcon() {
+  return (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      className="inline-block mr-1"
+    >
+      <rect width="16" height="12" fill="#B22234" />
+      <rect y="0" width="16" height="0.923" fill="#B22234" />
+      <rect y="0.923" width="16" height="0.923" fill="white" />
+      <rect y="1.846" width="16" height="0.923" fill="#B22234" />
+      <rect y="2.769" width="16" height="0.923" fill="white" />
+      <rect y="3.692" width="16" height="0.923" fill="#B22234" />
+      <rect y="4.615" width="16" height="0.923" fill="white" />
+      <rect y="5.538" width="16" height="0.923" fill="#B22234" />
+      <rect y="6.461" width="16" height="0.923" fill="white" />
+      <rect y="7.384" width="16" height="0.923" fill="#B22234" />
+      <rect y="8.307" width="16" height="0.923" fill="white" />
+      <rect y="9.230" width="16" height="0.923" fill="#B22234" />
+      <rect y="10.153" width="16" height="0.923" fill="white" />
+      <rect y="11.076" width="16" height="0.923" fill="#B22234" />
+      <rect width="7" height="5.538" fill="#3C3B6E" />
+    </svg>
+  );
+}
 
+function ChevronDownIcon() {
+  return (
+    <svg
+      className="w-3 h-3 inline-block"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
 const countryOptions = [
   { code: "pk", name: "Pakistan" },
   { code: "de", name: "Germany" },
@@ -463,19 +504,38 @@ export default function CategoriesPage() {
                 {showHelpDropdown && (
                   <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px]">
                     {[
-                      { label: "Help Center", to: "/help" },
-                      { label: "How to Buy", to: "/help#how-to-buy" },
-                      { label: "Shipping & Delivery", to: "/help#shipping" },
-                      { label: "Returns & Refunds", to: "/help#returns" },
-                      { label: "Contact Us", to: "/contact" },
-                      { label: "FAQs", to: "/help#faq" },
+                      {
+                        label: "Help Center",
+                        to: "/help",
+                        icon: (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-3.5 h-3.5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                            <circle
+                              cx="12"
+                              cy="17"
+                              r=".5"
+                              fill="currentColor"
+                            />
+                          </svg>
+                        ),
+                      },
                     ].map((item) => (
                       <Link
                         key={item.label}
                         to={item.to}
-                        onClick={() => setShowHelpDropdown(false)}
-                        className="block px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
                       >
+                        {item.icon}
                         {item.label}
                       </Link>
                     ))}
@@ -500,7 +560,7 @@ export default function CategoriesPage() {
                   className="flex items-center gap-1 focus:outline-none"
                 >
                   <img
-                    src={`https://flagcdn.com/w20/${selectedCountry}.png`}
+                    src={`/flags/${selectedCountry}.svg`}
                     alt="flag"
                     className="w-5 h-3.5 object-cover rounded-sm"
                   />
@@ -530,7 +590,7 @@ export default function CategoriesPage() {
                         className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600" : ""}`}
                       >
                         <img
-                          src={`https://flagcdn.com/w20/${c.code}.png`}
+                          src={`/flags/${c.code}.svg`}
                           alt={c.name}
                           className="w-5 h-3.5 object-cover rounded-sm"
                         />
@@ -753,7 +813,9 @@ export default function CategoriesPage() {
           <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              <FlagUSIcon />
+              English
+              <ChevronDownIcon />
             </div>
           </div>
         </div>

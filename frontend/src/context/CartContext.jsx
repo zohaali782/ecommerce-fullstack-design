@@ -6,17 +6,19 @@ export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (product, quantity = 1) => {
+    const productId = product._id || product.id; // ✅ dono _id aur id handle karta hai
+
     setCartItems((prev) => {
-      const existing = prev.find((i) => i.id === product._id);
+      const existing = prev.find((i) => i.id === productId);
       if (existing) {
         return prev.map((i) =>
-          i.id === product._id ? { ...i, qty: i.qty + quantity } : i,
+          i.id === productId ? { ...i, qty: i.qty + quantity } : i,
         );
       }
       return [
         ...prev,
         {
-          id: product._id,
+          id: productId, // ✅ correct id save hogi
           name: product.name,
           price: product.price,
           image: product.image,

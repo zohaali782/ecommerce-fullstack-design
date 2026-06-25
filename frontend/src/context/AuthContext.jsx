@@ -8,10 +8,16 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const stored = localStorage.getItem("nexmart_user");
-    if (stored) setUser(JSON.parse(stored));
-    setLoading(false);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        Promise.resolve().then(() => setUser(parsed));
+      } catch {
+        localStorage.removeItem("nexmart_user");
+      }
+    }
+    Promise.resolve().then(() => setLoading(false));
   }, []);
-
   const login = async (email, password) => {
     const res = await fetch("http://localhost:5000/api/auth/login", {
       method: "POST",

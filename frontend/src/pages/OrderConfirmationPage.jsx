@@ -1,14 +1,16 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  FaUserAlt,
-  FaRegCommentDots,
-  FaClipboardList,
-  FaShoppingCart,
   FaCheckCircle,
   FaBoxOpen,
   FaTruck,
   FaHome,
+  FaShoppingCart,
+  FaClipboardList,
 } from "react-icons/fa";
+
+import { useCart } from "../context/CartContext";
+import { useCurrency } from "../context/CurrencyContext";
 
 const categories = [
   "Automobiles",
@@ -19,6 +21,14 @@ const categories = [
   "Sports and outdoor",
   "Animal and pets",
   "Machinery tools",
+];
+
+// Same 4 countries used on the homepage
+const countryOptions = [
+  { code: "pk", name: "Pakistan" },
+  { code: "de", name: "Germany" },
+  { code: "us", name: "USA" },
+  { code: "ae", name: "UAE" },
 ];
 
 const orderNumber = "ORD-" + Math.floor(10000 + Math.random() * 90000);
@@ -42,8 +52,58 @@ const steps = [
   { icon: <FaHome />, label: "Delivered", done: false },
 ];
 
+function FlagUSIcon() {
+  return (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      className="inline-block mr-1"
+    >
+      <rect width="16" height="12" fill="#B22234" />
+      <rect y="0" width="16" height="0.923" fill="#B22234" />
+      <rect y="0.923" width="16" height="0.923" fill="white" />
+      <rect y="1.846" width="16" height="0.923" fill="#B22234" />
+      <rect y="2.769" width="16" height="0.923" fill="white" />
+      <rect y="3.692" width="16" height="0.923" fill="#B22234" />
+      <rect y="4.615" width="16" height="0.923" fill="white" />
+      <rect y="5.538" width="16" height="0.923" fill="#B22234" />
+      <rect y="6.461" width="16" height="0.923" fill="white" />
+      <rect y="7.384" width="16" height="0.923" fill="#B22234" />
+      <rect y="8.307" width="16" height="0.923" fill="white" />
+      <rect y="9.230" width="16" height="0.923" fill="#B22234" />
+      <rect y="10.153" width="16" height="0.923" fill="white" />
+      <rect y="11.076" width="16" height="0.923" fill="#B22234" />
+      <rect width="7" height="5.538" fill="#3C3B6E" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg
+      className="w-3 h-3 inline-block"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 export default function OrderConfirmationPage() {
   const { state } = useLocation();
+  const { currency, setCurrency } = useCurrency();
+  const { cartItems } = useCart();
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState("pk");
+  const [countryOpen, setCountryOpen] = useState(false); // desktop
+  const [mobileCountryOpen, setMobileCountryOpen] = useState(false); // mobile
 
   const savedOrder = localStorage.getItem("lastOrder");
   const orderState =
@@ -60,91 +120,372 @@ export default function OrderConfirmationPage() {
   const tax = orderState?.tax || 14;
   const total = orderState?.total || subtotal + tax;
 
+  const cartCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
+
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
-      {/* NAVBAR */}
-      <header className="bg-white border-b border-gray-200">
+      {/* ── NAVBAR ── */}
+      <header className="bg-white border-b border-gray-200 relative">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-3 py-2.5">
+          {/* Top row */}
+          <div className="flex flex-wrap items-center gap-3 py-2.5">
             <Link to="/" className="flex items-center gap-2 shrink-0">
               <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm">
                 N
               </div>
               <span className="font-bold text-gray-800 text-lg">NexMart</span>
             </Link>
-            <div className="flex flex-1 max-w-xl">
+
+            {/* Search */}
+            <div className="flex flex-1 min-w-full sm:min-w-0 order-3 sm:order-none">
               <input
                 type="text"
-                placeholder="Search"
-                className="flex-1 border border-gray-300 rounded-l px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
+                placeholder="Search products..."
+                className="flex-1 w-full border border-gray-300 rounded-l px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
               />
-              <select className="border-t border-b border-gray-300 px-2 text-xs text-gray-600 bg-gray-50">
-                <option>All category</option>
-                {categories.map((c) => (
-                  <option key={c}>{c}</option>
+              <select className="hidden sm:block border-t border-b border-gray-300 px-2 text-xs text-gray-600 bg-gray-50">
+                <option value="">All category</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
                 ))}
               </select>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-r text-sm font-medium">
+              <Link
+                to="/products"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-1.5 rounded-r text-sm font-medium shrink-0 flex items-center"
+              >
                 Search
-              </button>
+              </Link>
             </div>
-            <div className="flex items-center gap-4 ml-auto">
+
+            {/* Right icons */}
+            <div className="flex items-center gap-3 sm:gap-4 ml-auto">
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
-                <FaUserAlt className="text-xl mb-1" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 mb-0.5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                </svg>
                 <span className="text-[10px]">Profile</span>
               </Link>
-              <button className="flex flex-col items-center text-gray-400 hover:text-gray-600">
-                <FaRegCommentDots className="text-xl mb-1" />
-                <span className="text-[10px]">Message</span>
-              </button>
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
-                <FaClipboardList className="text-xl mb-1" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 mb-0.5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z" />
+                  <path
+                    d="M7 9h10M7 13h7"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
+                <span className="text-[10px]">Message</span>
+              </Link>
+              <Link
+                to="/profile"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 mb-0.5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
                 <span className="text-[10px]">Orders</span>
               </Link>
               <Link
                 to="/cart"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors relative"
               >
-                <FaShoppingCart className="text-xl mb-1" />
+                <div className="relative">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 mb-0.5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 6.9 18 9 18h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.45 5H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                  </svg>
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                      {cartCount}
+                    </span>
+                  )}
+                </div>
                 <span className="text-[10px]">My cart</span>
               </Link>
+
+              {/* Hamburger - mobile only */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="sm:hidden text-gray-600 p-1"
+                aria-label="Menu"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
-          <nav className="flex items-center justify-between py-1.5 border-t border-gray-100">
+
+          {/* ── Desktop secondary nav ── */}
+          <nav className="hidden md:flex items-center justify-between py-1.5 border-t border-gray-100">
             <div className="flex items-center gap-5">
-              <button className="flex items-center gap-1 text-sm text-gray-700">
+              <Link
+                to="/products"
+                className="flex items-center gap-1 text-sm text-gray-700 hover:text-blue-600"
+              >
                 ☰ All category
-              </button>
-              {["Hot offers", "Gift boxes", "Projects", "Menu item"].map(
-                (item) => (
-                  <a
-                    key={item}
-                    href="#"
-                    className="text-sm text-gray-600 hover:text-blue-600"
-                  >
-                    {item}
-                  </a>
-                ),
-              )}
-              <span className="text-sm text-gray-600 cursor-pointer">
-                Help ▾
-              </span>
+              </Link>
+              {[
+                { label: "Hot offers", to: "/hot-offers" },
+                { label: "Gift boxes", to: "/gift-boxes" },
+                { label: "Projects", to: "/projects" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className="text-sm text-gray-600 hover:text-blue-600"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <div className="relative group">
+                <span className="text-sm text-gray-600 cursor-pointer group-hover:text-blue-600">
+                  Help ▾
+                </span>
+                <div className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px] hidden group-hover:block">
+                  {[
+                    {
+                      label: "Help Center",
+                      to: "/help",
+                      icon: (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-3.5 h-3.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                          <circle cx="12" cy="17" r=".5" fill="currentColor" />
+                        </svg>
+                      ),
+                    },
+                  ].map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.to}
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      {item.icon}
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-600">
-              <select className="bg-transparent border-none outline-none cursor-pointer">
-                <option>English, USD</option>
+
+            <div className="flex items-center gap-4 text-sm text-gray-600">
+              {/* Currency */}
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="bg-transparent border-none outline-none cursor-pointer text-sm text-gray-600"
+              >
+                <option value="USD">English, USD</option>
+                <option value="PKR">English, PKR</option>
+                <option value="EUR">English, EUR</option>
               </select>
-              <select className="bg-transparent border-none outline-none cursor-pointer">
-                <option>🇵🇰 Pakistan</option>
-              </select>
+
+              {/* Ship to — desktop custom dropdown with flag + name */}
+              <div className="relative">
+                <button
+                  onClick={() => setCountryOpen(!countryOpen)}
+                  className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  <span>Ship to</span>
+                  <img
+                    src={`/flags/${selectedCountry}.svg`}
+                    alt={selectedCountry}
+                    className="w-5 h-3.5 object-cover rounded-sm"
+                  />
+                  <span className="text-xs">
+                    {
+                      countryOptions.find((c) => c.code === selectedCountry)
+                        ?.name
+                    }
+                  </span>
+                  <svg
+                    className="w-3 h-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                {countryOpen && (
+                  <div className="absolute top-7 right-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[140px]">
+                    {countryOptions.map((country) => (
+                      <button
+                        key={country.code}
+                        onClick={() => {
+                          setSelectedCountry(country.code);
+                          setCountryOpen(false);
+                        }}
+                        className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-blue-50 hover:text-blue-600 text-gray-700 ${selectedCountry === country.code ? "bg-blue-50 text-blue-600 font-medium" : ""}`}
+                      >
+                        <img
+                          src={`/flags/${country.code}.svg`}
+                          alt={country.name}
+                          className="w-5 h-3.5 object-cover rounded-sm"
+                        />
+                        {country.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </nav>
+
+          {/* ── Mobile dropdown menu ── */}
+          {mobileMenuOpen && (
+            <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
+              <Link
+                to="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-sm text-gray-700 font-medium py-2.5 border-b border-gray-100"
+              >
+                <span>☰</span> All category
+              </Link>
+              {[
+                { label: "Hot offers", to: "/hot-offers" },
+                { label: "Gift boxes", to: "/gift-boxes" },
+                { label: "Projects", to: "/projects" },
+                { label: "Profile", to: "/profile" },
+                { label: "Help Center", to: "/help" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between text-sm text-gray-600 py-2.5 border-b border-gray-100 hover:text-blue-600"
+                >
+                  {item.label}
+                  <span className="text-gray-300">›</span>
+                </Link>
+              ))}
+
+              {/* Currency */}
+              <div className="py-3 border-b border-gray-100">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white"
+                >
+                  <option value="USD">English, USD</option>
+                  <option value="PKR">English, PKR</option>
+                  <option value="EUR">English, EUR</option>
+                </select>
+              </div>
+
+              {/* Ship to — mobile custom dropdown with flag + name */}
+              <div className="py-3">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Ship to
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setMobileCountryOpen(!mobileCountryOpen)}
+                    className="w-full flex items-center gap-2 border border-gray-300 rounded px-3 py-2 bg-white text-left"
+                  >
+                    <img
+                      src={`/flags/${selectedCountry}.svg`}
+                      alt={selectedCountry}
+                      className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    />
+                    <span className="flex-1 text-sm text-gray-700">
+                      {
+                        countryOptions.find((c) => c.code === selectedCountry)
+                          ?.name
+                      }
+                    </span>
+                    <svg
+                      className={`w-3 h-3 text-gray-400 transition-transform ${mobileCountryOpen ? "rotate-180" : ""}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {mobileCountryOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-0.5 bg-white border border-gray-200 rounded shadow-lg z-50">
+                      {countryOptions.map((c) => (
+                        <button
+                          key={c.code}
+                          onClick={() => {
+                            setSelectedCountry(c.code);
+                            setMobileCountryOpen(false);
+                          }}
+                          className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-600 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
+                        >
+                          <img
+                            src={`/flags/${c.code}.svg`}
+                            alt={c.name}
+                            className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                          />
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -204,9 +545,9 @@ export default function OrderConfirmationPage() {
           </div>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           {/* Order Items */}
-          <div className="flex-1 bg-white rounded border border-gray-200 p-5">
+          <div className="flex-1 bg-white rounded border border-gray-200 p-5 min-w-0">
             <h2 className="text-sm font-bold text-gray-800 mb-4">
               Order Items
             </h2>
@@ -261,7 +602,7 @@ export default function OrderConfirmationPage() {
           </div>
 
           {/* Shipping + Payment */}
-          <div className="w-56 shrink-0 space-y-3">
+          <div className="w-full md:w-56 shrink-0 space-y-3">
             <div className="bg-white rounded border border-gray-200 p-4">
               <h3 className="text-sm font-bold text-gray-800 mb-3">
                 Shipping To
@@ -309,36 +650,39 @@ export default function OrderConfirmationPage() {
               <p className="text-xs text-gray-400 mb-2">
                 Issues with your order?
               </p>
-              <button className="w-full border border-blue-600 text-blue-600 text-xs py-1.5 rounded hover:bg-blue-50">
+              <Link
+                to="/help"
+                className="block w-full text-center border border-blue-600 text-blue-600 text-xs py-1.5 rounded hover:bg-blue-50"
+              >
                 Contact Support
-              </button>
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-4">
           <Link
             to="/"
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded text-sm font-medium"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded text-sm font-medium"
           >
             <FaShoppingCart className="text-xs" /> Continue Shopping
           </Link>
           <Link
             to="/profile"
-            className="flex items-center gap-2 border border-gray-300 text-gray-600 hover:border-blue-400 hover:text-blue-600 px-6 py-2.5 rounded text-sm font-medium"
+            className="flex items-center justify-center gap-2 border border-gray-300 text-gray-600 hover:border-blue-400 hover:text-blue-600 px-6 py-2.5 rounded text-sm font-medium"
           >
             <FaClipboardList className="text-xs" /> View My Orders
           </Link>
         </div>
       </div>
 
-      {/* FOOTER */}
+      {/* ── FOOTER ── */}
       <footer className="bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
             {/* Brand */}
-            <div>
+            <div className="col-span-2 sm:col-span-3 md:col-span-1">
               <div className="flex items-center gap-2 mb-2">
                 <div className="bg-blue-600 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm">
                   N
@@ -349,67 +693,88 @@ export default function OrderConfirmationPage() {
                 Best information about the company goes here.
               </p>
               <div className="flex gap-2">
-                {["f", "t", "in", "be", "yt"].map((s) => (
+                {[
+                  { key: "f", label: "Facebook" },
+                  { key: "t", label: "Twitter" },
+                  { key: "in", label: "LinkedIn" },
+                  { key: "be", label: "Behance" },
+                  { key: "yt", label: "YouTube" },
+                ].map((s) => (
                   <a
-                    key={s}
+                    key={s.key}
                     href="#"
-                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-6 h-6 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
+                    aria-label={s.label}
+                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-7 h-7 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
                   >
-                    {s}
+                    {s.key}
                   </a>
                 ))}
               </div>
             </div>
 
-            {/* Nav Columns */}
             {[
               {
                 title: "About",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
               },
               {
                 title: "Partnership",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
               },
               {
                 title: "Information",
                 links: [
-                  "Help Center",
-                  "Money Refund",
-                  "Shipping",
-                  "Contact us",
+                  { text: "Help Center", path: "/help" },
+                  { text: "Money Refund", path: "/money-refund" },
+                  { text: "Shipping", path: "/shipping" },
+                  { text: "Contact Us", path: "/contact" },
                 ],
               },
               {
-                title: "For users",
-                links: ["Login", "Register", "Settings", "My Orders"],
+                title: "For Users",
+                links: [
+                  { text: "Login", path: "/login" },
+                  { text: "Register", path: "/login" },
+                  { text: "Settings", path: "/profile" },
+                  { text: "My Orders", path: "/profile" },
+                ],
               },
             ].map((col) => (
               <div key={col.title}>
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
                   {col.title}
                 </h4>
                 {col.links.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+                  <Link
+                    key={link.text}
+                    to={link.path}
+                    className="block text-xs text-gray-500 hover:text-blue-600 mb-2"
                   >
-                    {link}
-                  </a>
+                    {link.text}
+                  </Link>
                 ))}
               </div>
             ))}
 
             {/* Get App */}
-            <div>
-              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+            <div className="col-span-2 sm:col-span-1">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3">
                 Get app
               </h4>
               <div className="flex flex-col gap-2">
                 <a
                   href="#"
-                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
                 >
                   <svg
                     width="18"
@@ -431,7 +796,7 @@ export default function OrderConfirmationPage() {
                 </a>
                 <a
                   href="#"
-                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
                 >
                   <svg
                     width="18"
@@ -455,11 +820,12 @@ export default function OrderConfirmationPage() {
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              <FlagUSIcon />
+              English
+              <ChevronDownIcon />
             </div>
           </div>
         </div>

@@ -1,12 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  FaUserAlt,
-  FaRegCommentDots,
-  FaClipboardList,
-  FaShoppingCart,
-} from "react-icons/fa";
 import { useCurrency } from "../context/CurrencyContext";
 import { useCart } from "../context/CartContext";
 
@@ -19,6 +12,13 @@ const categories = [
   "Sports and outdoor",
   "Animal and pets",
   "Machinery tools",
+];
+
+const countryOptions = [
+  { code: "pk", name: "Pakistan" },
+  { code: "de", name: "Germany" },
+  { code: "us", name: "USA" },
+  { code: "ae", name: "UAE" },
 ];
 
 const PROJECTS = [
@@ -130,6 +130,23 @@ const TAG_FILTERS = [
   "Healthcare",
 ];
 
+function Toast({ message, show }) {
+  if (!show) return null;
+  return (
+    <div className="fixed bottom-6 right-6 left-4 sm:left-auto bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-4 h-4 shrink-0"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+      </svg>
+      {message}
+    </div>
+  );
+}
+
 export default function ProjectsPage() {
   const navigate = useNavigate();
   const { currency, setCurrency } = useCurrency();
@@ -147,8 +164,13 @@ export default function ProjectsPage() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [toast, setToast] = useState({ show: false, message: "" });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState("pk");
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [mobileCountryOpen, setMobileCountryOpen] = useState(false);
 
   const cartCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
 
@@ -166,6 +188,11 @@ export default function ProjectsPage() {
     if (e.key === "Enter") handleSearch();
   };
 
+  const showToast = (msg) => {
+    setToast({ show: true, message: msg });
+    setTimeout(() => setToast({ show: false, message: "" }), 2500);
+  };
+
   const filtered = PROJECTS.filter((p) => {
     const matchStatus = activeStatus === "All" || p.status === activeStatus;
     const matchTag = activeTag === "All" || p.tags.includes(activeTag);
@@ -174,43 +201,56 @@ export default function ProjectsPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
+    setSubmitting(true);
+    setFormError("");
     try {
-      await axios.post("http://localhost:5000/api/inquiries", {
-        projectId: String(showInquiry.id),
-        projectTitle: showInquiry.title,
-        name: form.name,
-        company: form.company,
-        quantity: Number(form.qty),
-        details: form.message,
+      await fetch("http://localhost:5000/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId: String(showInquiry.id),
+          projectTitle: showInquiry.title,
+          name: form.name,
+          company: form.company,
+          quantity: Number(form.qty),
+          details: form.message,
+        }),
       });
       setSubmitted(true);
+      showToast("Inquiry sent successfully!");
       setTimeout(() => {
         setShowInquiry(null);
         setSubmitted(false);
         setForm({ name: "", company: "", qty: "", message: "" });
       }, 2000);
-    } catch (err) {
-      setError("Failed to send inquiry. Please try again.");
+    } catch {
+      setFormError("Failed to send inquiry. Please try again.");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
+  const pct = (p) => Math.round((p.fulfilled / p.total) * 100);
+
   return (
-    <div className="bg-gray-100 min-h-screen font-sans">
-      {/* NAVBAR */}
-      <header className="bg-white border-b border-gray-200">
+    <div className="bg-gray-100 min-h-screen font-sans flex flex-col">
+      <Toast show={toast.show} message={toast.message} />
+
+      {/* ── NAVBAR ── */}
+      <header className="bg-white border-b border-gray-200 relative">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-3 py-2.5">
+          {/* Top row */}
+          <div className="flex flex-wrap items-center gap-3 py-2.5">
+            {/* Logo */}
             <Link to="/" className="flex items-center gap-2 shrink-0">
               <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm">
                 N
               </div>
               <span className="font-bold text-gray-800 text-lg">NexMart</span>
             </Link>
-            <div className="flex flex-1 max-w-xl">
+
+            {/* Search bar */}
+            <div className="flex flex-1 min-w-full sm:min-w-0 order-3 sm:order-none">
               <input
                 type="text"
                 placeholder="Search products..."
@@ -222,7 +262,7 @@ export default function ProjectsPage() {
               <select
                 value={searchCategory}
                 onChange={(e) => setSearchCategory(e.target.value)}
-                className="border-t border-b border-gray-300 px-2 text-xs text-gray-600 bg-gray-50"
+                className="hidden sm:block border-t border-b border-gray-300 px-2 text-xs text-gray-600 bg-gray-50"
               >
                 <option value="">All category</option>
                 {categories.map((cat) => (
@@ -233,39 +273,83 @@ export default function ProjectsPage() {
               </select>
               <button
                 onClick={handleSearch}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-r text-sm font-medium"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-1.5 rounded-r text-sm font-medium shrink-0"
               >
                 Search
               </button>
             </div>
-            <div className="flex items-center gap-4 ml-auto">
+
+            {/* Right icons */}
+            <div className="flex items-center gap-3 sm:gap-4 ml-auto">
+              {/* Profile */}
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
-                <FaUserAlt className="text-xl mb-1" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 mb-0.5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z" />
+                </svg>
                 <span className="text-[10px]">Profile</span>
               </Link>
+
+              {/* Message */}
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
-                <FaRegCommentDots className="text-xl mb-1" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 mb-0.5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z" />
+                  <path
+                    d="M7 9h10M7 13h7"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                </svg>
                 <span className="text-[10px]">Message</span>
               </Link>
+
+              {/* Orders */}
               <Link
                 to="/profile"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
-                <FaClipboardList className="text-xl mb-1" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 mb-0.5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                </svg>
                 <span className="text-[10px]">Orders</span>
               </Link>
+
+              {/* Cart */}
               <Link
                 to="/cart"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600 relative"
+                className="flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors relative"
               >
                 <div className="relative">
-                  <FaShoppingCart className="text-xl mb-1" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 mb-0.5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 6.9 18 9 18h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.45 5H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                  </svg>
                   {cartCount > 0 && (
                     <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                       {cartCount}
@@ -274,15 +358,46 @@ export default function ProjectsPage() {
                 </div>
                 <span className="text-[10px]">My cart</span>
               </Link>
+
+              {/* Hamburger (mobile) */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="sm:hidden text-gray-600 p-1"
+                aria-label="Menu"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
-          <nav className="flex items-center justify-between py-1.5 border-t border-gray-100">
+
+          {/* ── Desktop secondary nav ── */}
+          <nav className="hidden md:flex items-center justify-between py-1.5 border-t border-gray-100">
             <div className="flex items-center gap-5">
               <Link
                 to="/products"
                 className="flex items-center gap-1 text-sm text-gray-700 hover:text-blue-600"
               >
-                ☰ All category
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+                All category
               </Link>
               <Link
                 to="/hot-offers"
@@ -302,35 +417,221 @@ export default function ProjectsPage() {
               >
                 Projects
               </Link>
-              <a href="#" className="text-sm text-gray-600 hover:text-blue-600">
-                Menu item
-              </a>
-              <span className="text-sm text-gray-600 cursor-pointer">
-                Help ▾
-              </span>
+              <div className="relative group">
+                <span className="text-sm text-gray-600 cursor-pointer group-hover:text-blue-600 flex items-center gap-0.5">
+                  Help
+                  <svg
+                    className="w-3 h-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </span>
+                <div className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px] hidden group-hover:block">
+                  <Link
+                    to="/help"
+                    className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3.5 h-3.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                      <circle cx="12" cy="17" r=".5" fill="currentColor" />
+                    </svg>
+                    Help Center
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-600">
+
+            <div className="flex items-center gap-4 text-sm text-gray-600">
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="bg-transparent border-none outline-none cursor-pointer"
+                className="bg-transparent border-none outline-none cursor-pointer text-sm text-gray-600"
               >
                 <option value="USD">English, USD</option>
                 <option value="PKR">English, PKR</option>
                 <option value="EUR">English, EUR</option>
               </select>
-              <div className="flex items-center gap-1">
-                <span>🇵🇰</span>
-                <select className="bg-transparent border-none outline-none cursor-pointer">
-                  <option>Pakistan</option>
-                  <option>Germany</option>
-                  <option>USA</option>
-                  <option>UAE</option>
-                  <option>UK</option>
-                </select>
+
+              {/* Ship to — desktop */}
+              <div className="relative">
+                <button
+                  onClick={() => setCountryOpen(!countryOpen)}
+                  className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  <span>Ship to</span>
+                  <img
+                    src={`/flags/${selectedCountry}.svg`}
+                    alt={selectedCountry}
+                    className="w-5 h-3.5 object-cover rounded-sm"
+                  />
+                  <span className="text-xs">
+                    {
+                      countryOptions.find((c) => c.code === selectedCountry)
+                        ?.name
+                    }
+                  </span>
+                  <svg
+                    className="w-3 h-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                {countryOpen && (
+                  <div className="absolute top-7 right-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[140px]">
+                    {countryOptions.map((country) => (
+                      <button
+                        key={country.code}
+                        onClick={() => {
+                          setSelectedCountry(country.code);
+                          setCountryOpen(false);
+                        }}
+                        className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-blue-50 hover:text-blue-600 text-gray-700 ${selectedCountry === country.code ? "bg-blue-50 text-blue-600 font-medium" : ""}`}
+                      >
+                        <img
+                          src={`/flags/${country.code}.svg`}
+                          alt={country.name}
+                          className="w-5 h-3.5 object-cover rounded-sm"
+                        />
+                        {country.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </nav>
+
+          {/* ── Mobile dropdown menu ── */}
+          {mobileMenuOpen && (
+            <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
+              <Link
+                to="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-sm text-gray-700 font-medium py-2.5 border-b border-gray-100"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+                All category
+              </Link>
+              {[
+                { label: "Hot offers", to: "/hot-offers" },
+                { label: "Gift boxes", to: "/gift-boxes" },
+                { label: "Projects", to: "/projects" },
+                { label: "Profile", to: "/profile" },
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between text-sm text-gray-600 py-2.5 border-b border-gray-100 hover:text-blue-600"
+                >
+                  {item.label}
+                  <span className="text-gray-300">›</span>
+                </Link>
+              ))}
+
+              {/* Currency */}
+              <div className="py-3 border-b border-gray-100">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white"
+                >
+                  <option value="USD">English, USD</option>
+                  <option value="PKR">English, PKR</option>
+                  <option value="EUR">English, EUR</option>
+                </select>
+              </div>
+
+              {/* Ship to — mobile */}
+              <div className="py-3">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Ship to
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setMobileCountryOpen(!mobileCountryOpen)}
+                    className="w-full flex items-center gap-2 border border-gray-300 rounded px-3 py-2 bg-white text-left"
+                  >
+                    <img
+                      src={`/flags/${selectedCountry}.svg`}
+                      alt={selectedCountry}
+                      className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    />
+                    <span className="flex-1 text-sm text-gray-700">
+                      {
+                        countryOptions.find((c) => c.code === selectedCountry)
+                          ?.name
+                      }
+                    </span>
+                    <svg
+                      className={`w-3 h-3 text-gray-400 transition-transform ${mobileCountryOpen ? "rotate-180" : ""}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {mobileCountryOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-0.5 bg-white border border-gray-200 rounded shadow-lg z-50">
+                      {countryOptions.map((c) => (
+                        <button
+                          key={c.code}
+                          onClick={() => {
+                            setSelectedCountry(c.code);
+                            setMobileCountryOpen(false);
+                          }}
+                          className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-600 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
+                        >
+                          <img
+                            src={`/flags/${c.code}.svg`}
+                            alt={c.name}
+                            className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                          />
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -344,15 +645,25 @@ export default function ProjectsPage() {
             <span>›</span>
             <span className="text-white">Projects</span>
           </div>
-          <h1 className="text-white text-2xl font-bold mb-1">📋 Projects</h1>
+          <h1 className="text-white text-2xl font-bold mb-1 flex items-center gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z" />
+            </svg>
+            Projects
+          </h1>
           <p className="text-white/80 text-sm">
-            Bulk & business orders — join an active project or submit a new
+            Bulk &amp; business orders — join an active project or submit a new
             sourcing request.
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-5">
+      <div className="max-w-7xl mx-auto px-4 py-5 flex-1">
         {/* STATS ROW */}
         <div className="grid grid-cols-3 gap-3 mb-4">
           {[
@@ -421,6 +732,12 @@ export default function ProjectsPage() {
           </div>
         </div>
 
+        {/* RESULTS COUNT */}
+        <p className="text-xs text-gray-500 mb-3">
+          <span className="font-semibold text-gray-700">{filtered.length}</span>{" "}
+          projects available
+        </p>
+
         {/* PROJECT CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((project) => (
@@ -460,6 +777,7 @@ export default function ProjectsPage() {
                   ))}
                 </div>
 
+                {/* Progress bar */}
                 <div className="mb-3">
                   <div className="flex justify-between text-[10px] text-gray-400 mb-1">
                     <span>Fulfillment progress</span>
@@ -470,17 +788,15 @@ export default function ProjectsPage() {
                   <div className="bg-gray-100 rounded-full h-1.5 w-full">
                     <div
                       className="bg-blue-500 h-1.5 rounded-full transition-all"
-                      style={{
-                        width: `${Math.round((project.fulfilled / project.total) * 100)}%`,
-                      }}
-                    ></div>
+                      style={{ width: `${pct(project)}%` }}
+                    />
                   </div>
                   <p className="text-[10px] text-gray-400 mt-0.5 text-right">
-                    {Math.round((project.fulfilled / project.total) * 100)}%
-                    fulfilled
+                    {pct(project)}% fulfilled
                   </p>
                 </div>
 
+                {/* Meta */}
                 <div className="grid grid-cols-3 gap-2 border-t border-gray-100 pt-3 mb-3">
                   <div>
                     <p className="text-[10px] text-gray-400">Min order</p>
@@ -516,7 +832,14 @@ export default function ProjectsPage() {
         {/* EMPTY STATE */}
         {filtered.length === 0 && (
           <div className="text-center py-16 text-gray-400">
-            <p className="text-4xl mb-3">📋</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-12 h-12 mx-auto mb-3 text-gray-300"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+            </svg>
             <p className="text-sm font-medium">
               No projects match this filter.
             </p>
@@ -551,11 +874,12 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* FOOTER */}
-      <footer className="bg-white border-t border-gray-200 mt-8">
+      {/* ── FOOTER ── */}
+      <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-5 gap-6">
-            <div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+            {/* Brand */}
+            <div className="col-span-2 sm:col-span-3 md:col-span-1">
               <div className="flex items-center gap-2 mb-2">
                 <div className="bg-blue-600 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm">
                   N
@@ -566,80 +890,164 @@ export default function ProjectsPage() {
                 Best information about the company goes here.
               </p>
               <div className="flex gap-2">
-                {["f", "t", "in", "be", "yt"].map((s) => (
+                {[
+                  { key: "f", label: "Facebook" },
+                  { key: "t", label: "Twitter" },
+                  { key: "in", label: "LinkedIn" },
+                  { key: "be", label: "Behance" },
+                  { key: "yt", label: "YouTube" },
+                ].map((s) => (
                   <a
-                    key={s}
+                    key={s.key}
                     href="#"
-                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-6 h-6 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
+                    aria-label={s.label}
+                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-7 h-7 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
                   >
-                    {s}
+                    {s.key}
                   </a>
                 ))}
               </div>
             </div>
+
             {[
               {
                 title: "About",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
               },
               {
                 title: "Partnership",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
               },
               {
                 title: "Information",
                 links: [
-                  "Help Center",
-                  "Money Refund",
-                  "Shipping",
-                  "Contact us",
+                  { text: "Help Center", path: "/help" },
+                  { text: "Money Refund", path: "/money-refund" },
+                  { text: "Shipping", path: "/shipping" },
+                  { text: "Contact Us", path: "/contact" },
                 ],
               },
               {
                 title: "For users",
-                links: ["Login", "Register", "Settings", "My Orders"],
+                links: [
+                  { text: "Login", path: "/login" },
+                  { text: "Register", path: "/login" },
+                  { text: "Settings", path: "/profile" },
+                  { text: "My Orders", path: "/profile" },
+                ],
               },
             ].map((col) => (
               <div key={col.title}>
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
                   {col.title}
                 </h4>
                 {col.links.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+                  <Link
+                    key={link.text}
+                    to={link.path}
+                    className="block text-xs text-gray-500 hover:text-blue-600 mb-2"
                   >
-                    {link}
-                  </a>
+                    {link.text}
+                  </Link>
                 ))}
               </div>
             ))}
-          </div>
-          <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
-            <p className="text-xs text-gray-400">© 2026 NexMart.</p>
-            <div className="flex gap-2">
-              <a
-                href="#"
-                className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-              >
-                🍎 App Store
-              </a>
-              <a
-                href="#"
-                className="bg-black text-white text-xs px-3 py-1.5 rounded flex items-center gap-1"
-              >
-                ▶ Google Play
-              </a>
+
+            {/* Get app */}
+            <div className="col-span-2 sm:col-span-1">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                Get app
+              </h4>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      Download on the
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      App Store
+                    </span>
+                  </div>
+                </a>
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M3.18 23.76c.3.17.64.24.99.2l13.29-7.67-2.83-2.83-11.45 10.3zM.54 1.18C.2 1.56 0 2.14 0 2.89v18.22c0 .75.2 1.33.54 1.71l.09.08 10.21-10.21v-.24L.63 1.1l-.09.08zM20.94 10.8l-2.82-1.63-3.17 3.17 3.17 3.17 2.85-1.65c.81-.47.81-1.23-.03-1.7v.04zM4.17.24L17.46 7.9l-2.83 2.83L3.18.47c.35-.38.71-.41.99-.23z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      GET IT ON
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      Google Play
+                    </span>
+                  </div>
+                </a>
+              </div>
             </div>
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-3"
+                viewBox="0 0 60 30"
+              >
+                <rect width="60" height="30" fill="#B22234" />
+                <rect y="2.3" width="60" height="2.3" fill="white" />
+                <rect y="6.9" width="60" height="2.3" fill="white" />
+                <rect y="11.5" width="60" height="2.3" fill="white" />
+                <rect y="16.2" width="60" height="2.3" fill="white" />
+                <rect y="20.8" width="60" height="2.3" fill="white" />
+                <rect y="25.4" width="60" height="2.3" fill="white" />
+                <rect width="24" height="16.2" fill="#3C3B6E" />
+              </svg>
+              English
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* INQUIRY MODAL */}
+      {/* ── INQUIRY MODAL ── */}
       {showInquiry && (
         <div
           className="fixed inset-0 bg-black/40 z-40 flex items-center justify-center p-4"
@@ -651,7 +1059,14 @@ export default function ProjectsPage() {
           >
             {submitted ? (
               <div className="text-center py-8">
-                <p className="text-3xl mb-3">✅</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-12 h-12 mx-auto mb-3 text-green-500"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                </svg>
                 <p className="text-sm font-semibold text-gray-800">
                   Inquiry sent!
                 </p>
@@ -731,15 +1146,17 @@ export default function ProjectsPage() {
                       className="w-full border border-gray-200 rounded px-3 py-1.5 text-xs focus:outline-none focus:border-blue-400 resize-none"
                     />
                   </div>
-                  {error && (
-                    <p className="text-xs text-red-500 text-center">{error}</p>
+                  {formError && (
+                    <p className="text-xs text-red-500 text-center">
+                      {formError}
+                    </p>
                   )}
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={submitting}
                     className="w-full bg-blue-600 text-white text-xs font-semibold py-2 rounded hover:bg-blue-700 transition-colors disabled:opacity-60"
                   >
-                    {loading ? "Sending..." : "Send inquiry"}
+                    {submitting ? "Sending..." : "Send inquiry"}
                   </button>
                 </form>
               </>

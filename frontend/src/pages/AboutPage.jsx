@@ -14,6 +14,49 @@ const categories = [
   "Machinery tools",
 ];
 
+function FlagUSIcon() {
+  return (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      className="inline-block mr-1"
+    >
+      <rect width="16" height="12" fill="#B22234" />
+      <rect y="0" width="16" height="0.923" fill="#B22234" />
+      <rect y="0.923" width="16" height="0.923" fill="white" />
+      <rect y="1.846" width="16" height="0.923" fill="#B22234" />
+      <rect y="2.769" width="16" height="0.923" fill="white" />
+      <rect y="3.692" width="16" height="0.923" fill="#B22234" />
+      <rect y="4.615" width="16" height="0.923" fill="white" />
+      <rect y="5.538" width="16" height="0.923" fill="#B22234" />
+      <rect y="6.461" width="16" height="0.923" fill="white" />
+      <rect y="7.384" width="16" height="0.923" fill="#B22234" />
+      <rect y="8.307" width="16" height="0.923" fill="white" />
+      <rect y="9.230" width="16" height="0.923" fill="#B22234" />
+      <rect y="10.153" width="16" height="0.923" fill="white" />
+      <rect y="11.076" width="16" height="0.923" fill="#B22234" />
+      <rect width="7" height="5.538" fill="#3C3B6E" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg
+      className="w-3 h-3 inline-block"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 const countryOptions = [
   { code: "pk", name: "Pakistan" },
   { code: "de", name: "Germany" },
@@ -156,7 +199,7 @@ const values = [
 ];
 
 const team = [
-  { name: "Ahmed Raza", role: "CEO & Co-founder", initials: "AR" },
+  { name: "Zoha Ali", role: "CEO & Co-founder", initials: "ZA" },
   { name: "Sara Khan", role: "Head of Operations", initials: "SK" },
   { name: "Bilal Malik", role: "Chief Technology Officer", initials: "BM" },
   { name: "Nadia Farooq", role: "Head of Supplier Relations", initials: "NF" },
@@ -380,142 +423,27 @@ export default function AboutPage() {
                 </button>
                 {showHelpDropdown && (
                   <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px]">
-                    {[
-                      {
-                        label: "Help Center",
-                        to: "/help",
-                        icon: (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3.5 h-3.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
-                            <circle
-                              cx="12"
-                              cy="17"
-                              r=".5"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        ),
-                      },
-                      {
-                        label: "How to Buy",
-                        to: "/help#how-to-buy",
-                        icon: (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3.5 h-3.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                            <line x1="3" y1="6" x2="21" y2="6" />
-                            <path d="M16 10a4 4 0 01-8 0" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        label: "Shipping & Delivery",
-                        to: "/help#shipping",
-                        icon: (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3.5 h-3.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <rect x="1" y="3" width="15" height="13" rx="1" />
-                            <path d="M16 8h4l3 5v3h-7V8z" />
-                            <circle cx="5.5" cy="18.5" r="2.5" />
-                            <circle cx="18.5" cy="18.5" r="2.5" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        label: "Returns & Refunds",
-                        to: "/help#returns",
-                        icon: (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3.5 h-3.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M3 9l4-4-4-4" />
-                            <path d="M7 5H3a9 9 0 109 9" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        label: "Contact Us",
-                        to: "/contact",
-                        icon: (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3.5 h-3.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                            <polyline points="22,6 12,13 2,6" />
-                          </svg>
-                        ),
-                      },
-                      {
-                        label: "FAQs",
-                        to: "/help#faq",
-                        icon: (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3.5 h-3.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                            <line x1="9" y1="10" x2="15" y2="10" />
-                            <line x1="12" y1="7" x2="12" y2="13" />
-                          </svg>
-                        ),
-                      },
-                    ].map((item) => (
-                      <Link
-                        key={item.label}
-                        to={item.to}
-                        onClick={() => setShowHelpDropdown(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                    <Link
+                      to="/help"
+                      onClick={() => setShowHelpDropdown(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-3.5 h-3.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        {item.icon}
-                        {item.label}
-                      </Link>
-                    ))}
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                        <circle cx="12" cy="17" r=".5" fill="currentColor" />
+                      </svg>
+                      Help Center
+                    </Link>
                   </div>
                 )}
               </div>
@@ -537,7 +465,7 @@ export default function AboutPage() {
                   className="flex items-center gap-1 focus:outline-none"
                 >
                   <img
-                    src={`https://flagcdn.com/w20/${selectedCountry}.png`}
+                    src={`/flags/${selectedCountry}.svg`}
                     alt="flag"
                     className="w-5 h-3.5 object-cover rounded-sm"
                   />
@@ -567,7 +495,7 @@ export default function AboutPage() {
                         className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600" : ""}`}
                       >
                         <img
-                          src={`https://flagcdn.com/w20/${c.code}.png`}
+                          src={`/flags/${c.code}.svg`}
                           alt={c.name}
                           className="w-5 h-3.5 object-cover rounded-sm"
                         />
@@ -583,12 +511,20 @@ export default function AboutPage() {
           {/* Mobile menu */}
           {mobileMenuOpen && (
             <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
+              <Link
+                to="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-sm text-gray-700 font-medium py-2.5 border-b border-gray-100"
+              >
+                <span>☰</span> All category
+              </Link>
               {[
-                { label: "All category", to: "/products" },
                 { label: "Hot offers", to: "/hot-offers" },
                 { label: "Gift boxes", to: "/gift-boxes" },
                 { label: "Projects", to: "/projects" },
                 { label: "Help Center", to: "/help" },
+                { label: "Money Refund", to: "/money-refund" },
+                { label: "Shipping", to: "/shipping" },
                 { label: "Profile", to: "/profile" },
               ].map((item) => (
                 <Link
@@ -601,6 +537,79 @@ export default function AboutPage() {
                   <span className="text-gray-300">›</span>
                 </Link>
               ))}
+
+              {/* Currency */}
+              <div className="py-3 border-b border-gray-100">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white"
+                >
+                  <option value="USD">English, USD</option>
+                  <option value="PKR">English, PKR</option>
+                  <option value="EUR">English, EUR</option>
+                </select>
+              </div>
+
+              {/* Ship to */}
+              <div className="py-3">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Ship to
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                    className="w-full flex items-center gap-2 border border-gray-300 rounded px-3 py-2 bg-white text-left"
+                  >
+                    <img
+                      src={`/flags/${selectedCountry}.svg`}
+                      alt={selectedCountry}
+                      className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    />
+                    <span className="flex-1 text-sm text-gray-700">
+                      {
+                        countryOptions.find((c) => c.code === selectedCountry)
+                          ?.name
+                      }
+                    </span>
+                    <svg
+                      className={`w-3 h-3 text-gray-400 transition-transform ${showCountryDropdown ? "rotate-180" : ""}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {showCountryDropdown && (
+                    <div className="absolute left-0 right-0 top-full mt-0.5 bg-white border border-gray-200 rounded shadow-lg z-50">
+                      {countryOptions.map((c) => (
+                        <button
+                          key={c.code}
+                          onClick={() => {
+                            setSelectedCountry(c.code);
+                            setShowCountryDropdown(false);
+                          }}
+                          className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-600 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
+                        >
+                          <img
+                            src={`/flags/${c.code}.svg`}
+                            alt={c.name}
+                            className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                          />
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -796,11 +805,36 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
+            <div>
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                About
+              </h4>
+              <Link
+                to="/about"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/find-store"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Find store
+              </Link>
+              <Link
+                to="/categories"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Categories
+              </Link>
+              <Link
+                to="/blogs"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Blogs
+              </Link>
+            </div>
             {[
-              {
-                title: "About",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
-              },
               {
                 title: "Partnership",
                 links: ["About Us", "Find store", "Categories", "Blogs"],
@@ -880,7 +914,9 @@ export default function AboutPage() {
           <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              <FlagUSIcon />
+              English
+              <ChevronDownIcon />
             </div>
           </div>
         </div>

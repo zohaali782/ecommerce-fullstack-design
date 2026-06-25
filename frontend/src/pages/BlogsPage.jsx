@@ -219,23 +219,27 @@ export default function BlogsPage() {
                 </button>
                 {showHelpDropdown && (
                   <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px]">
-                    {[
-                      { label: "Help Center", to: "/help" },
-                      { label: "How to Buy", to: "/help#how-to-buy" },
-                      { label: "Shipping & Delivery", to: "/help#shipping" },
-                      { label: "Returns & Refunds", to: "/help#returns" },
-                      { label: "Contact Us", to: "/contact" },
-                      { label: "FAQs", to: "/help#faq" },
-                    ].map((item) => (
-                      <Link
-                        key={item.label}
-                        to={item.to}
-                        onClick={() => setShowHelpDropdown(false)}
-                        className="block px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                    <Link
+                      to="/help"
+                      onClick={() => setShowHelpDropdown(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-3.5 h-3.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        {item.label}
-                      </Link>
-                    ))}
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                        <circle cx="12" cy="17" r=".5" fill="currentColor" />
+                      </svg>
+                      Help Center
+                    </Link>
                   </div>
                 )}
               </div>
@@ -257,7 +261,7 @@ export default function BlogsPage() {
                   className="flex items-center gap-1 focus:outline-none"
                 >
                   <img
-                    src={`https://flagcdn.com/w20/${selectedCountry}.png`}
+                    src={`/flags/${selectedCountry}.svg`}
                     alt="flag"
                     className="w-5 h-3.5 object-cover rounded-sm"
                   />
@@ -287,7 +291,7 @@ export default function BlogsPage() {
                         className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600" : ""}`}
                       >
                         <img
-                          src={`https://flagcdn.com/w20/${c.code}.png`}
+                          src={`/flags/${c.code}.svg`}
                           alt={c.name}
                           className="w-5 h-3.5 object-cover rounded-sm"
                         />
@@ -303,12 +307,20 @@ export default function BlogsPage() {
           {/* Mobile menu */}
           {mobileMenuOpen && (
             <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
+              <Link
+                to="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-sm text-gray-700 font-medium py-2.5 border-b border-gray-100"
+              >
+                <span>☰</span> All category
+              </Link>
               {[
-                { label: "All category", to: "/products" },
                 { label: "Hot offers", to: "/hot-offers" },
                 { label: "Gift boxes", to: "/gift-boxes" },
                 { label: "Projects", to: "/projects" },
                 { label: "Help Center", to: "/help" },
+                { label: "Money Refund", to: "/money-refund" },
+                { label: "Shipping", to: "/shipping" },
                 { label: "Profile", to: "/profile" },
               ].map((item) => (
                 <Link
@@ -321,6 +333,79 @@ export default function BlogsPage() {
                   <span className="text-gray-300">›</span>
                 </Link>
               ))}
+
+              {/* Currency */}
+              <div className="py-3 border-b border-gray-100">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white"
+                >
+                  <option value="USD">English, USD</option>
+                  <option value="PKR">English, PKR</option>
+                  <option value="EUR">English, EUR</option>
+                </select>
+              </div>
+
+              {/* Ship to */}
+              <div className="py-3">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Ship to
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                    className="w-full flex items-center gap-2 border border-gray-300 rounded px-3 py-2 bg-white text-left"
+                  >
+                    <img
+                      src={`/flags/${selectedCountry}.svg`}
+                      alt={selectedCountry}
+                      className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    />
+                    <span className="flex-1 text-sm text-gray-700">
+                      {
+                        countryOptions.find((c) => c.code === selectedCountry)
+                          ?.name
+                      }
+                    </span>
+                    <svg
+                      className={`w-3 h-3 text-gray-400 transition-transform ${showCountryDropdown ? "rotate-180" : ""}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {showCountryDropdown && (
+                    <div className="absolute left-0 right-0 top-full mt-0.5 bg-white border border-gray-200 rounded shadow-lg z-50">
+                      {countryOptions.map((c) => (
+                        <button
+                          key={c.code}
+                          onClick={() => {
+                            setSelectedCountry(c.code);
+                            setShowCountryDropdown(false);
+                          }}
+                          className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-600 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
+                        >
+                          <img
+                            src={`/flags/${c.code}.svg`}
+                            alt={c.name}
+                            className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                          />
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -340,7 +425,6 @@ export default function BlogsPage() {
       {/* COMING SOON CONTENT */}
       <div className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="text-center max-w-md w-full">
-          {/* SVG Illustration */}
           <div className="flex justify-center mb-8">
             <svg
               width="120"
@@ -349,7 +433,6 @@ export default function BlogsPage() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Notebook pages */}
               <rect
                 x="22"
                 y="18"
@@ -380,7 +463,6 @@ export default function BlogsPage() {
                 stroke="#3B82F6"
                 strokeWidth="1.8"
               />
-              {/* Lines on page */}
               <line
                 x1="24"
                 y1="32"
@@ -408,7 +490,6 @@ export default function BlogsPage() {
                 strokeWidth="2"
                 strokeLinecap="round"
               />
-              {/* Pencil */}
               <g transform="translate(58, 58) rotate(-35)">
                 <rect
                   x="-5"
@@ -437,14 +518,12 @@ export default function BlogsPage() {
                   strokeWidth="1"
                 />
               </g>
-              {/* Small sparkles */}
               <circle cx="90" cy="20" r="3" fill="#3B82F6" opacity="0.5" />
               <circle cx="100" cy="35" r="2" fill="#93C5FD" opacity="0.6" />
               <circle cx="85" cy="10" r="2" fill="#BFDBFE" opacity="0.7" />
             </svg>
           </div>
 
-          {/* Badge */}
           <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-5">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
             <span className="text-xs font-medium text-blue-600 tracking-wide uppercase">
@@ -460,7 +539,6 @@ export default function BlogsPage() {
             your email and we will let you know the moment we go live.
           </p>
 
-          {/* Email notify */}
           {!submitted ? (
             <div className="flex gap-2 max-w-sm mx-auto">
               <input
@@ -499,7 +577,6 @@ export default function BlogsPage() {
             </div>
           )}
 
-          {/* Back link */}
           <div className="mt-8">
             <Link
               to="/"
@@ -528,6 +605,7 @@ export default function BlogsPage() {
       <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
+            {/* Brand */}
             <div className="col-span-2 sm:col-span-3 md:col-span-1">
               <div className="flex items-center gap-2 mb-2">
                 <div className="bg-blue-600 text-white w-7 h-7 rounded flex items-center justify-center font-bold text-sm">
@@ -539,127 +617,159 @@ export default function BlogsPage() {
                 Best information about the company goes here.
               </p>
               <div className="flex gap-2">
-                {["f", "t", "in", "be", "yt"].map((s) => (
+                {[
+                  { key: "f", label: "Facebook" },
+                  { key: "t", label: "Twitter" },
+                  { key: "in", label: "LinkedIn" },
+                  { key: "be", label: "Behance" },
+                  { key: "yt", label: "YouTube" },
+                ].map((s) => (
                   <a
-                    key={s}
+                    key={s.key}
                     href="#"
-                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-6 h-6 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
+                    aria-label={s.label}
+                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-7 h-7 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
                   >
-                    {s}
+                    {s.key}
                   </a>
                 ))}
               </div>
             </div>
-            <div>
-              <h4 className="text-sm font-semibold text-gray-800 mb-2">
-                About
-              </h4>
-              <Link
-                to="/about"
-                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
-              >
-                About Us
-              </Link>
-              <Link
-                to="/find-store"
-                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
-              >
-                Find store
-              </Link>
-              <Link
-                to="/categories"
-                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
-              >
-                Categories
-              </Link>
-              <Link
-                to="/blogs"
-                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
-              >
-                Blogs
-              </Link>
-            </div>
+
             {[
               {
+                title: "About",
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
+              },
+              {
                 title: "Partnership",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
               },
               {
                 title: "Information",
                 links: [
-                  "Help Center",
-                  "Money Refund",
-                  "Shipping",
-                  "Contact us",
+                  { text: "Help Center", path: "/help" },
+                  { text: "Money Refund", path: "/money-refund" },
+                  { text: "Shipping", path: "/shipping" },
+                  { text: "Contact Us", path: "/contact" },
                 ],
               },
               {
                 title: "For users",
-                links: ["Login", "Register", "Settings", "My Orders"],
+                links: [
+                  { text: "Login", path: "/login" },
+                  { text: "Register", path: "/login" },
+                  { text: "Settings", path: "/profile" },
+                  { text: "My Orders", path: "/profile" },
+                ],
               },
             ].map((col) => (
               <div key={col.title}>
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
                   {col.title}
                 </h4>
                 {col.links.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+                  <Link
+                    key={link.text}
+                    to={link.path}
+                    className="block text-xs text-gray-500 hover:text-blue-600 mb-2"
                   >
-                    {link}
-                  </a>
+                    {link.text}
+                  </Link>
                 ))}
               </div>
             ))}
+
+            {/* Get app */}
             <div className="col-span-2 sm:col-span-1">
-              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3">
                 Get app
               </h4>
               <div className="flex flex-col gap-2">
-                {[
-                  {
-                    store: "App Store",
-                    sub: "Download on the",
-                    path: "M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z",
-                  },
-                  {
-                    store: "Google Play",
-                    sub: "GET IT ON",
-                    path: "M3.18 23.76c.3.17.64.24.99.2l13.29-7.67-2.83-2.83-11.45 10.3zM.54 1.18C.2 1.56 0 2.14 0 2.89v18.22c0 .75.2 1.33.54 1.71l.09.08 10.21-10.21v-.24L.63 1.1l-.09.08zM20.94 10.8l-2.82-1.63-3.17 3.17 3.17 3.17 2.85-1.65c.81-.47.81-1.23-.03-1.7v.04zM4.17.24L17.46 7.9l-2.83 2.83L3.18.47c.35-.38.71-.41.99-.23z",
-                  },
-                ].map((app) => (
-                  <a
-                    key={app.store}
-                    href="#"
-                    className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="white"
-                    >
-                      <path d={app.path} />
-                    </svg>
-                    <div className="flex flex-col">
-                      <span className="text-[9px] opacity-75 leading-tight">
-                        {app.sub}
-                      </span>
-                      <span className="text-xs font-semibold leading-tight">
-                        {app.store}
-                      </span>
-                    </div>
-                  </a>
-                ))}
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      Download on the
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      App Store
+                    </span>
+                  </div>
+                </a>
+                <a
+                  href="#"
+                  className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="white"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M3.18 23.76c.3.17.64.24.99.2l13.29-7.67-2.83-2.83-11.45 10.3zM.54 1.18C.2 1.56 0 2.14 0 2.89v18.22c0 .75.2 1.33.54 1.71l.09.08 10.21-10.21v-.24L.63 1.1l-.09.08zM20.94 10.8l-2.82-1.63-3.17 3.17 3.17 3.17 2.85-1.65c.81-.47.81-1.23-.03-1.7v.04zM4.17.24L17.46 7.9l-2.83 2.83L3.18.47c.35-.38.71-.41.99-.23z" />
+                  </svg>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] opacity-75 leading-tight">
+                      GET IT ON
+                    </span>
+                    <span className="text-xs font-semibold leading-tight">
+                      Google Play
+                    </span>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
+
           <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              {/* US flag SVG */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-3"
+                viewBox="0 0 60 30"
+              >
+                <rect width="60" height="30" fill="#B22234" />
+                <rect y="2.3" width="60" height="2.3" fill="white" />
+                <rect y="6.9" width="60" height="2.3" fill="white" />
+                <rect y="11.5" width="60" height="2.3" fill="white" />
+                <rect y="16.2" width="60" height="2.3" fill="white" />
+                <rect y="20.8" width="60" height="2.3" fill="white" />
+                <rect y="25.4" width="60" height="2.3" fill="white" />
+                <rect width="24" height="16.2" fill="#3C3B6E" />
+              </svg>
+              English
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </div>
           </div>
         </div>

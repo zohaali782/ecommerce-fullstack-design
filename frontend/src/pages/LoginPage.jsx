@@ -21,7 +21,48 @@ export default function LoginPage() {
     setError("");
     setStep(2);
   };
+  function FlagUSIcon() {
+    return (
+      <svg
+        width="16"
+        height="12"
+        viewBox="0 0 16 12"
+        className="inline-block mr-1"
+      >
+        <rect width="16" height="12" fill="#B22234" />
+        <rect y="0" width="16" height="0.923" fill="#B22234" />
+        <rect y="0.923" width="16" height="0.923" fill="white" />
+        <rect y="1.846" width="16" height="0.923" fill="#B22234" />
+        <rect y="2.769" width="16" height="0.923" fill="white" />
+        <rect y="3.692" width="16" height="0.923" fill="#B22234" />
+        <rect y="4.615" width="16" height="0.923" fill="white" />
+        <rect y="5.538" width="16" height="0.923" fill="#B22234" />
+        <rect y="6.461" width="16" height="0.923" fill="white" />
+        <rect y="7.384" width="16" height="0.923" fill="#B22234" />
+        <rect y="8.307" width="16" height="0.923" fill="white" />
+        <rect y="9.230" width="16" height="0.923" fill="#B22234" />
+        <rect y="10.153" width="16" height="0.923" fill="white" />
+        <rect y="11.076" width="16" height="0.923" fill="#B22234" />
+        <rect width="7" height="5.538" fill="#3C3B6E" />
+      </svg>
+    );
+  }
 
+  function ChevronDownIcon() {
+    return (
+      <svg
+        className="w-3 h-3 inline-block"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fillRule="evenodd"
+          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+          clipRule="evenodd"
+        />
+      </svg>
+    );
+  }
   const handleSubmit = async () => {
     if (loading) return; // hard guard against any double-invoke
     if (!password) {
@@ -407,7 +448,7 @@ export default function LoginPage() {
       </div>
 
       {/* FOOTER — matches HomePage.jsx */}
-      <footer className="bg-white border-t border-gray-200">
+      <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
             {/* Brand */}
@@ -422,61 +463,82 @@ export default function LoginPage() {
                 Best information about the company goes here.
               </p>
               <div className="flex gap-2">
-                {["f", "t", "in", "be", "yt"].map((s) => (
+                {[
+                  { key: "f", label: "Facebook" },
+                  { key: "t", label: "Twitter" },
+                  { key: "in", label: "LinkedIn" },
+                  { key: "be", label: "Behance" },
+                  { key: "yt", label: "YouTube" },
+                ].map((s) => (
                   <a
-                    key={s}
+                    key={s.key}
                     href="#"
-                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-6 h-6 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
+                    aria-label={s.label}
+                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-7 h-7 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
                   >
-                    {s}
+                    {s.key}
                   </a>
                 ))}
               </div>
             </div>
 
-            {/* Nav Columns */}
             {[
               {
                 title: "About",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
               },
               {
                 title: "Partnership",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
+                links: [
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
+                ],
               },
               {
                 title: "Information",
                 links: [
-                  "Help Center",
-                  "Money Refund",
-                  "Shipping",
-                  "Contact us",
+                  { text: "Help Center", path: "/help" },
+                  { text: "Money Refund", path: "/money-refund" },
+                  { text: "Shipping", path: "/shipping" },
+                  { text: "Contact Us", path: "/contact" },
                 ],
               },
               {
-                title: "For users",
-                links: ["Login", "Register", "Settings", "My Orders"],
+                title: "For Users",
+                links: [
+                  { text: "Login", path: "/login" },
+                  { text: "Register", path: "/login" },
+                  { text: "Settings", path: "/profile" },
+                  { text: "My Orders", path: "/profile" },
+                ],
               },
             ].map((col) => (
               <div key={col.title}>
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
                   {col.title}
                 </h4>
                 {col.links.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+                  <Link
+                    key={link.text}
+                    to={link.path}
+                    className="block text-xs text-gray-500 hover:text-blue-600 mb-2"
                   >
-                    {link}
-                  </a>
+                    {link.text}
+                  </Link>
                 ))}
               </div>
             ))}
 
             {/* Get App */}
             <div className="col-span-2 sm:col-span-1">
-              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3">
                 Get app
               </h4>
               <div className="flex flex-col gap-2">
@@ -528,11 +590,12 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Bottom Bar */}
           <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              <FlagUSIcon />
+              English
+              <ChevronDownIcon />
             </div>
           </div>
         </div>

@@ -13,13 +13,54 @@ const navCategories = [
   "Animal and pets",
   "Machinery tools",
 ];
+function FlagUSIcon() {
+  return (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      className="inline-block mr-1"
+    >
+      <rect width="16" height="12" fill="#B22234" />
+      <rect y="0" width="16" height="0.923" fill="#B22234" />
+      <rect y="0.923" width="16" height="0.923" fill="white" />
+      <rect y="1.846" width="16" height="0.923" fill="#B22234" />
+      <rect y="2.769" width="16" height="0.923" fill="white" />
+      <rect y="3.692" width="16" height="0.923" fill="#B22234" />
+      <rect y="4.615" width="16" height="0.923" fill="white" />
+      <rect y="5.538" width="16" height="0.923" fill="#B22234" />
+      <rect y="6.461" width="16" height="0.923" fill="white" />
+      <rect y="7.384" width="16" height="0.923" fill="#B22234" />
+      <rect y="8.307" width="16" height="0.923" fill="white" />
+      <rect y="9.230" width="16" height="0.923" fill="#B22234" />
+      <rect y="10.153" width="16" height="0.923" fill="white" />
+      <rect y="11.076" width="16" height="0.923" fill="#B22234" />
+      <rect width="7" height="5.538" fill="#3C3B6E" />
+    </svg>
+  );
+}
+
+function ChevronDownIcon() {
+  return (
+    <svg
+      className="w-3 h-3 inline-block"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
 
 const countryOptions = [
   { code: "pk", name: "Pakistan" },
   { code: "de", name: "Germany" },
   { code: "us", name: "USA" },
   { code: "ae", name: "UAE" },
-  { code: "gb", name: "UK" },
 ];
 
 export default function FindStorePage() {
@@ -28,9 +69,11 @@ export default function FindStorePage() {
   const { cartItems } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Ship to state — same pattern as ContactPage
   const [selectedCountry, setSelectedCountry] = useState("pk");
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
-  const [showHelpDropdown, setShowHelpDropdown] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false); // desktop
+  const [mobileCountryOpen, setMobileCountryOpen] = useState(false); // mobile
 
   const cartCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
 
@@ -44,6 +87,7 @@ export default function FindStorePage() {
       {/* NAVBAR */}
       <header className="bg-white border-b border-gray-200 relative">
         <div className="max-w-7xl mx-auto px-4">
+          {/* Top row */}
           <div className="flex flex-wrap items-center gap-3 py-2.5">
             <Link to="/" className="flex items-center gap-2 shrink-0">
               <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm">
@@ -52,6 +96,7 @@ export default function FindStorePage() {
               <span className="font-bold text-gray-800 text-lg">NexMart</span>
             </Link>
 
+            {/* Search */}
             <div className="flex flex-1 min-w-full sm:min-w-0 order-3 sm:order-none">
               <input
                 type="text"
@@ -59,7 +104,7 @@ export default function FindStorePage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                className="flex-1 border border-gray-300 rounded-l px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
+                className="flex-1 w-full border border-gray-300 rounded-l px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
               />
               <select className="hidden sm:block border-t border-b border-gray-300 px-2 text-xs text-gray-600 bg-gray-50">
                 <option value="">All category</option>
@@ -77,14 +122,15 @@ export default function FindStorePage() {
               </button>
             </div>
 
+            {/* Right icons */}
             <div className="flex items-center gap-3 sm:gap-4 ml-auto">
               <Link
                 to="/profile"
-                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mb-1"
+                  className="w-6 h-6 mb-0.5"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -94,11 +140,11 @@ export default function FindStorePage() {
               </Link>
               <Link
                 to="/profile"
-                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mb-1"
+                  className="w-6 h-6 mb-0.5"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -115,11 +161,11 @@ export default function FindStorePage() {
               </Link>
               <Link
                 to="/profile"
-                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mb-1"
+                  className="w-6 h-6 mb-0.5"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -129,12 +175,12 @@ export default function FindStorePage() {
               </Link>
               <Link
                 to="/cart"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600 relative"
+                className="flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors relative"
               >
                 <div className="relative">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 mb-1"
+                    className="w-6 h-6 mb-0.5"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -148,9 +194,12 @@ export default function FindStorePage() {
                 </div>
                 <span className="text-[10px]">My cart</span>
               </Link>
+
+              {/* Hamburger - mobile only */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="sm:hidden text-gray-600 p-1"
+                aria-label="Menu"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +218,7 @@ export default function FindStorePage() {
             </div>
           </div>
 
-          {/* Desktop nav */}
+          {/* ── Desktop secondary nav ── */}
           <nav className="hidden md:flex items-center justify-between py-1.5 border-t border-gray-100">
             <div className="flex items-center gap-5">
               <Link
@@ -191,101 +240,106 @@ export default function FindStorePage() {
                   {item.label}
                 </Link>
               ))}
-              <div className="relative">
-                <button
-                  onClick={() => setShowHelpDropdown(!showHelpDropdown)}
-                  className="text-sm text-gray-600 hover:text-blue-600 flex items-center gap-0.5"
-                >
-                  Help
-                  <svg
-                    className="w-3 h-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-                {showHelpDropdown && (
-                  <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px]">
-                    {[
-                      { label: "Help Center", to: "/help" },
-                      { label: "How to Buy", to: "/help#how-to-buy" },
-                      { label: "Shipping & Delivery", to: "/help#shipping" },
-                      { label: "Returns & Refunds", to: "/help#returns" },
-                      { label: "Contact Us", to: "/contact" },
-                      { label: "FAQs", to: "/help#faq" },
-                    ].map((item) => (
-                      <Link
-                        key={item.label}
-                        to={item.to}
-                        onClick={() => setShowHelpDropdown(false)}
-                        className="block px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+              {/* Help dropdown — hover-based, same as ContactPage */}
+              <div className="relative group">
+                <span className="text-sm text-gray-600 cursor-pointer group-hover:text-blue-600">
+                  Help ▾
+                </span>
+                <div className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px] hidden group-hover:block">
+                  {[
+                    {
+                      label: "Help Center",
+                      to: "/help",
+                      icon: (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-3.5 h-3.5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                          <circle cx="12" cy="17" r=".5" fill="currentColor" />
+                        </svg>
+                      ),
+                    },
+                  ].map((item) => (
+                    <Link
+                      key={item.label}
+                      to={item.to}
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      {item.icon}
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-600">
+
+            <div className="flex items-center gap-4 text-sm text-gray-600">
+              {/* Currency */}
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="bg-transparent border-none outline-none cursor-pointer text-sm"
+                className="bg-transparent border-none outline-none cursor-pointer text-sm text-gray-600"
               >
                 <option value="USD">English, USD</option>
                 <option value="PKR">English, PKR</option>
                 <option value="EUR">English, EUR</option>
               </select>
-              <div className="relative flex items-center gap-1.5">
-                <span className="text-sm text-gray-500">Ship to</span>
+
+              {/* Ship to — desktop custom dropdown with flag + name, same as ContactPage */}
+              <div className="relative">
                 <button
-                  onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                  className="flex items-center gap-1 focus:outline-none"
+                  onClick={() => setCountryOpen(!countryOpen)}
+                  className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors"
                 >
+                  <span>Ship to</span>
                   <img
-                    src={`https://flagcdn.com/w20/${selectedCountry}.png`}
-                    alt="flag"
+                    src={`/flags/${selectedCountry}.svg`}
+                    alt={selectedCountry}
                     className="w-5 h-3.5 object-cover rounded-sm"
                   />
+                  <span className="text-xs">
+                    {
+                      countryOptions.find((c) => c.code === selectedCountry)
+                        ?.name
+                    }
+                  </span>
                   <svg
-                    className="w-3 h-3 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    className="w-3 h-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </button>
-                {showCountryDropdown && (
-                  <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50 py-1 min-w-[130px]">
-                    {countryOptions.map((c) => (
+                {countryOpen && (
+                  <div className="absolute top-7 right-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[140px]">
+                    {countryOptions.map((country) => (
                       <button
-                        key={c.code}
+                        key={country.code}
                         onClick={() => {
-                          setSelectedCountry(c.code);
-                          setShowCountryDropdown(false);
+                          setSelectedCountry(country.code);
+                          setCountryOpen(false);
                         }}
-                        className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600" : ""}`}
+                        className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-blue-50 hover:text-blue-600 text-gray-700 ${selectedCountry === country.code ? "bg-blue-50 text-blue-600 font-medium" : ""}`}
                       >
                         <img
-                          src={`https://flagcdn.com/w20/${c.code}.png`}
-                          alt={c.name}
+                          src={`/flags/${country.code}.svg`}
+                          alt={country.name}
                           className="w-5 h-3.5 object-cover rounded-sm"
                         />
-                        {c.name}
+                        {country.name}
                       </button>
                     ))}
                   </div>
@@ -294,15 +348,23 @@ export default function FindStorePage() {
             </div>
           </nav>
 
-          {/* Mobile menu */}
+          {/* ── Mobile dropdown menu — same as ContactPage ── */}
           {mobileMenuOpen && (
             <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
+              <Link
+                to="/products"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-sm text-gray-700 font-medium py-2.5 border-b border-gray-100"
+              >
+                <span>☰</span> All category
+              </Link>
               {[
-                { label: "All category", to: "/products" },
                 { label: "Hot offers", to: "/hot-offers" },
                 { label: "Gift boxes", to: "/gift-boxes" },
                 { label: "Projects", to: "/projects" },
                 { label: "Help Center", to: "/help" },
+                { label: "Money Refund", to: "/money-refund" },
+                { label: "Shipping", to: "/shipping" },
                 { label: "Profile", to: "/profile" },
               ].map((item) => (
                 <Link
@@ -315,6 +377,79 @@ export default function FindStorePage() {
                   <span className="text-gray-300">›</span>
                 </Link>
               ))}
+
+              {/* Currency */}
+              <div className="py-3 border-b border-gray-100">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Currency
+                </label>
+                <select
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 bg-white"
+                >
+                  <option value="USD">English, USD</option>
+                  <option value="PKR">English, PKR</option>
+                  <option value="EUR">English, EUR</option>
+                </select>
+              </div>
+
+              {/* Ship to — mobile custom dropdown with flag + name, same as ContactPage */}
+              <div className="py-3">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Ship to
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setMobileCountryOpen(!mobileCountryOpen)}
+                    className="w-full flex items-center gap-2 border border-gray-300 rounded px-3 py-2 bg-white text-left"
+                  >
+                    <img
+                      src={`/flags/${selectedCountry}.svg`}
+                      alt={selectedCountry}
+                      className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    />
+                    <span className="flex-1 text-sm text-gray-700">
+                      {
+                        countryOptions.find((c) => c.code === selectedCountry)
+                          ?.name
+                      }
+                    </span>
+                    <svg
+                      className={`w-3 h-3 text-gray-400 transition-transform ${mobileCountryOpen ? "rotate-180" : ""}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {mobileCountryOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-0.5 bg-white border border-gray-200 rounded shadow-lg z-50">
+                      {countryOptions.map((c) => (
+                        <button
+                          key={c.code}
+                          onClick={() => {
+                            setSelectedCountry(c.code);
+                            setMobileCountryOpen(false);
+                          }}
+                          className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-600 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
+                        >
+                          <img
+                            src={`/flags/${c.code}.svg`}
+                            alt={c.name}
+                            className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                          />
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -334,7 +469,6 @@ export default function FindStorePage() {
       {/* COMING SOON CONTENT */}
       <div className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="text-center max-w-md w-full">
-          {/* SVG Illustration — store / map pin themed */}
           <div className="flex justify-center mb-8">
             <svg
               width="120"
@@ -343,7 +477,6 @@ export default function FindStorePage() {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Map background */}
               <rect
                 x="8"
                 y="30"
@@ -354,7 +487,6 @@ export default function FindStorePage() {
                 stroke="#BFDBFE"
                 strokeWidth="1.5"
               />
-              {/* Map grid lines */}
               <line
                 x1="8"
                 y1="55"
@@ -395,27 +527,22 @@ export default function FindStorePage() {
                 stroke="#DBEAFE"
                 strokeWidth="1"
               />
-              {/* Road horizontal */}
               <rect
                 x="8"
                 y="62"
                 width="104"
                 height="8"
-                rx="0"
                 fill="#BFDBFE"
                 opacity="0.5"
               />
-              {/* Road vertical */}
               <rect
                 x="58"
                 y="30"
                 width="8"
                 height="75"
-                rx="0"
                 fill="#BFDBFE"
                 opacity="0.5"
               />
-              {/* Small building 1 */}
               <rect
                 x="18"
                 y="70"
@@ -444,7 +571,6 @@ export default function FindStorePage() {
                 fill="white"
                 opacity="0.8"
               />
-              {/* Small building 2 */}
               <rect
                 x="78"
                 y="75"
@@ -473,7 +599,6 @@ export default function FindStorePage() {
                 fill="white"
                 opacity="0.8"
               />
-              {/* Main map pin */}
               <ellipse
                 cx="62"
                 cy="108"
@@ -493,7 +618,6 @@ export default function FindStorePage() {
             </svg>
           </div>
 
-          {/* Badge */}
           <div className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-full px-3 py-1 mb-5">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
             <span className="text-xs font-medium text-blue-600 tracking-wide uppercase">
@@ -509,7 +633,6 @@ export default function FindStorePage() {
             Check back soon to find the nearest location.
           </p>
 
-          {/* Back link */}
           <Link
             to="/"
             className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-blue-600 transition-colors"
@@ -558,6 +681,7 @@ export default function FindStorePage() {
                 ))}
               </div>
             </div>
+
             <div>
               <h4 className="text-sm font-semibold text-gray-800 mb-2">
                 About
@@ -575,7 +699,7 @@ export default function FindStorePage() {
                 Find store
               </Link>
               <Link
-                to="/categories"
+                to="/products"
                 className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
               >
                 Categories
@@ -587,40 +711,97 @@ export default function FindStorePage() {
                 Blogs
               </Link>
             </div>
-            {[
-              {
-                title: "Partnership",
-                links: ["About Us", "Find store", "Categories", "Blogs"],
-              },
-              {
-                title: "Information",
-                links: [
-                  "Help Center",
-                  "Money Refund",
-                  "Shipping",
-                  "Contact us",
-                ],
-              },
-              {
-                title: "For users",
-                links: ["Login", "Register", "Settings", "My Orders"],
-              },
-            ].map((col) => (
-              <div key={col.title}>
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
-                  {col.title}
-                </h4>
-                {col.links.map((link) => (
-                  <a
-                    key={link}
-                    href="#"
-                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
-                  >
-                    {link}
-                  </a>
-                ))}
-              </div>
-            ))}
+
+            <div>
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                Partnership
+              </h4>
+              <Link
+                to="/about"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/find-store"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Find store
+              </Link>
+              <Link
+                to="/products"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Categories
+              </Link>
+              <Link
+                to="/blogs"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Blogs
+              </Link>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                Information
+              </h4>
+              <Link
+                to="/help"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Help Center
+              </Link>
+              <Link
+                to="/money-refund"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Money Refund
+              </Link>
+              <Link
+                to="/shipping"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Shipping
+              </Link>
+              <Link
+                to="/contact"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Contact us
+              </Link>
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                For users
+              </h4>
+              <Link
+                to="/login"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Register
+              </Link>
+              <Link
+                to="/profile"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                Settings
+              </Link>
+              <Link
+                to="/profile"
+                className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+              >
+                My Orders
+              </Link>
+            </div>
+
             <div className="col-span-2 sm:col-span-1">
               <h4 className="text-sm font-semibold text-gray-800 mb-2">
                 Get app
@@ -664,10 +845,13 @@ export default function FindStorePage() {
               </div>
             </div>
           </div>
+
           <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              <FlagUSIcon />
+              English
+              <ChevronDownIcon />
             </div>
           </div>
         </div>

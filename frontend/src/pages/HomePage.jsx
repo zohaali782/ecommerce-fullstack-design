@@ -39,7 +39,48 @@ const suppliers = [
   { country: "Great Britain", domain: "shopname.co.uk", flag: "🇬🇧" },
   { country: "Pakistan", domain: "shopname.pk", flag: "🇵🇰" },
 ];
+function FlagUSIcon() {
+  return (
+    <svg
+      width="16"
+      height="12"
+      viewBox="0 0 16 12"
+      className="inline-block mr-1"
+    >
+      <rect width="16" height="12" fill="#B22234" />
+      <rect y="0" width="16" height="0.923" fill="#B22234" />
+      <rect y="0.923" width="16" height="0.923" fill="white" />
+      <rect y="1.846" width="16" height="0.923" fill="#B22234" />
+      <rect y="2.769" width="16" height="0.923" fill="white" />
+      <rect y="3.692" width="16" height="0.923" fill="#B22234" />
+      <rect y="4.615" width="16" height="0.923" fill="white" />
+      <rect y="5.538" width="16" height="0.923" fill="#B22234" />
+      <rect y="6.461" width="16" height="0.923" fill="white" />
+      <rect y="7.384" width="16" height="0.923" fill="#B22234" />
+      <rect y="8.307" width="16" height="0.923" fill="white" />
+      <rect y="9.230" width="16" height="0.923" fill="#B22234" />
+      <rect y="10.153" width="16" height="0.923" fill="white" />
+      <rect y="11.076" width="16" height="0.923" fill="#B22234" />
+      <rect width="7" height="5.538" fill="#3C3B6E" />
+    </svg>
+  );
+}
 
+function ChevronDownIcon() {
+  return (
+    <svg
+      className="w-3 h-3 inline-block"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
 const categories = [
   "Automobiles",
   "Clothes and wear",
@@ -49,6 +90,14 @@ const categories = [
   "Sports and outdoor",
   "Animal and pets",
   "Machinery tools",
+];
+
+// UK removed — only 4 countries
+const countryOptions = [
+  { code: "pk", name: "Pakistan" },
+  { code: "de", name: "Germany" },
+  { code: "us", name: "USA" },
+  { code: "ae", name: "UAE" },
 ];
 
 function CountdownTimer() {
@@ -140,6 +189,11 @@ export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState(false);
 
+  // Ship to state
+  const [selectedCountry, setSelectedCountry] = useState("pk");
+  const [countryOpen, setCountryOpen] = useState(false); // desktop
+  const [mobileCountryOpen, setMobileCountryOpen] = useState(false); // mobile
+
   const handleSearch = () => {
     if (searchQuery.trim()) {
       navigate(
@@ -159,8 +213,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState({ show: false, message: "" });
   const [inquiry, setInquiry] = useState({ item: "", details: "", qty: "" });
-  const [countryOpen, setCountryOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState("de");
 
   useEffect(() => {
     fetch("http://localhost:5000/api/products")
@@ -184,7 +236,7 @@ export default function HomePage() {
     e.preventDefault();
     e.stopPropagation();
     addToCart(product, 1);
-    showToast(`${product.name} cart mein add ho gaya!`);
+    showToast(`${product.name} Product added in the cart`);
   };
 
   const hotProducts = products.filter((p) => p.isHot).slice(0, 5);
@@ -203,9 +255,10 @@ export default function HomePage() {
     <div className="bg-gray-100 min-h-screen font-sans">
       <Toast show={toast.show} message={toast.message} />
 
-      {/* NAVBAR */}
+      {/* ── NAVBAR ── */}
       <header className="bg-white border-b border-gray-200 relative">
         <div className="max-w-7xl mx-auto px-4">
+          {/* Top row */}
           <div className="flex flex-wrap items-center gap-3 py-2.5">
             <Link to="/" className="flex items-center gap-2 shrink-0">
               <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm">
@@ -214,7 +267,7 @@ export default function HomePage() {
               <span className="font-bold text-gray-800 text-lg">NexMart</span>
             </Link>
 
-            {/* Search - full width on mobile, inline on desktop */}
+            {/* Search */}
             <div className="flex flex-1 min-w-full sm:min-w-0 order-3 sm:order-none">
               <input
                 type="text"
@@ -244,14 +297,15 @@ export default function HomePage() {
               </button>
             </div>
 
+            {/* Right icons */}
             <div className="flex items-center gap-3 sm:gap-4 ml-auto">
               <Link
                 to="/profile"
-                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mb-1"
+                  className="w-6 h-6 mb-0.5"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -261,11 +315,11 @@ export default function HomePage() {
               </Link>
               <Link
                 to="/profile"
-                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mb-1"
+                  className="w-6 h-6 mb-0.5"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -282,11 +336,11 @@ export default function HomePage() {
               </Link>
               <Link
                 to="/profile"
-                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-gray-600"
+                className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mb-1"
+                  className="w-6 h-6 mb-0.5"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -296,12 +350,12 @@ export default function HomePage() {
               </Link>
               <Link
                 to="/cart"
-                className="flex flex-col items-center text-gray-400 hover:text-gray-600 relative"
+                className="flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors relative"
               >
                 <div className="relative">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 mb-1"
+                    className="w-6 h-6 mb-0.5"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -339,7 +393,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Desktop nav row */}
+          {/* ── Desktop secondary nav ── */}
           <nav className="hidden md:flex items-center justify-between py-1.5 border-t border-gray-100">
             <div className="flex items-center gap-5">
               <Link
@@ -365,7 +419,6 @@ export default function HomePage() {
                 <span className="text-sm text-gray-600 cursor-pointer group-hover:text-blue-600">
                   Help ▾
                 </span>
-
                 <div className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px] hidden group-hover:block">
                   {[
                     {
@@ -388,45 +441,6 @@ export default function HomePage() {
                         </svg>
                       ),
                     },
-                    {
-                      label: "Contact Us",
-                      to: "/contact",
-                      icon: (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-3.5 h-3.5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                          <polyline points="22,6 12,13 2,6" />
-                        </svg>
-                      ),
-                    },
-                    {
-                      label: "FAQs",
-                      to: "/help#faqs",
-                      icon: (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-3.5 h-3.5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                          <line x1="9" y1="10" x2="15" y2="10" />
-                          <line x1="12" y1="7" x2="12" y2="13" />
-                        </svg>
-                      ),
-                    },
                   ].map((item) => (
                     <Link
                       key={item.label}
@@ -440,52 +454,67 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-600">
+
+            <div className="flex items-center gap-4 text-sm text-gray-600">
+              {/* Currency */}
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="bg-transparent border-none outline-none cursor-pointer"
+                className="bg-transparent border-none outline-none cursor-pointer text-sm text-gray-600"
               >
                 <option value="USD">English, USD</option>
                 <option value="PKR">English, PKR</option>
                 <option value="EUR">English, EUR</option>
               </select>
-              <div
-                className="relative flex items-center gap-1 cursor-pointer"
-                onClick={() => setCountryOpen(!countryOpen)}
-              >
-                <span>Ship to</span>
-                <img
-                  src={`https://flagcdn.com/w20/${selectedCountry}.png`}
-                  alt="flag"
-                  className="w-5 h-3.5 object-cover rounded-sm"
-                />
-                <span>▾</span>
+
+              {/* Ship to — desktop custom dropdown with flag + name */}
+              <div className="relative">
+                <button
+                  onClick={() => setCountryOpen(!countryOpen)}
+                  className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  <span>Ship to</span>
+                  <img
+                    src={`/flags/${selectedCountry}.svg`}
+                    alt={selectedCountry}
+                    className="w-5 h-3.5 object-cover rounded-sm"
+                  />
+                  <span className="text-xs">
+                    {
+                      countryOptions.find((c) => c.code === selectedCountry)
+                        ?.name
+                    }
+                  </span>
+                  <svg
+                    className="w-3 h-3"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
                 {countryOpen && (
-                  <div className="absolute top-6 right-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[120px]">
-                    {[
-                      { code: "pk", name: "Pakistan" },
-                      { code: "de", name: "Germany" },
-                      { code: "us", name: "USA" },
-                      { code: "ae", name: "UAE" },
-                      { code: "gb", name: "UK" },
-                    ].map((country) => (
-                      <div
+                  <div className="absolute top-7 right-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[140px]">
+                    {countryOptions.map((country) => (
+                      <button
                         key={country.code}
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={() => {
                           setSelectedCountry(country.code);
                           setCountryOpen(false);
                         }}
-                        className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 text-xs text-gray-700"
+                        className={`flex items-center gap-2 w-full px-3 py-1.5 text-xs hover:bg-blue-50 hover:text-blue-600 text-gray-700 ${selectedCountry === country.code ? "bg-blue-50 text-blue-600 font-medium" : ""}`}
                       >
                         <img
-                          src={`https://flagcdn.com/w20/${country.code}.png`}
+                          src={`/flags/${country.code}.svg`}
                           alt={country.name}
                           className="w-5 h-3.5 object-cover rounded-sm"
                         />
-                        <span>{country.name}</span>
-                      </div>
+                        {country.name}
+                      </button>
                     ))}
                   </div>
                 )}
@@ -493,7 +522,7 @@ export default function HomePage() {
             </div>
           </nav>
 
-          {/* Mobile dropdown menu */}
+          {/* ── Mobile dropdown menu ── */}
           {mobileMenuOpen && (
             <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
               <Link
@@ -519,7 +548,9 @@ export default function HomePage() {
                   <span className="text-gray-300">›</span>
                 </Link>
               ))}
-              <div className="py-3">
+
+              {/* Currency */}
+              <div className="py-3 border-b border-gray-100">
                 <label className="text-xs text-gray-400 block mb-1">
                   Currency
                 </label>
@@ -533,6 +564,63 @@ export default function HomePage() {
                   <option value="EUR">English, EUR</option>
                 </select>
               </div>
+
+              {/* Ship to — mobile custom dropdown with flag + name */}
+              <div className="py-3">
+                <label className="text-xs text-gray-400 block mb-1">
+                  Ship to
+                </label>
+                <div className="relative">
+                  <button
+                    onClick={() => setMobileCountryOpen(!mobileCountryOpen)}
+                    className="w-full flex items-center gap-2 border border-gray-300 rounded px-3 py-2 bg-white text-left"
+                  >
+                    <img
+                      src={`/flags/${selectedCountry}.svg`}
+                      alt={selectedCountry}
+                      className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                    />
+                    <span className="flex-1 text-sm text-gray-700">
+                      {
+                        countryOptions.find((c) => c.code === selectedCountry)
+                          ?.name
+                      }
+                    </span>
+                    <svg
+                      className={`w-3 h-3 text-gray-400 transition-transform ${mobileCountryOpen ? "rotate-180" : ""}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  {mobileCountryOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-0.5 bg-white border border-gray-200 rounded shadow-lg z-50">
+                      {countryOptions.map((c) => (
+                        <button
+                          key={c.code}
+                          onClick={() => {
+                            setSelectedCountry(c.code);
+                            setMobileCountryOpen(false);
+                          }}
+                          className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-blue-50 hover:text-blue-600 ${selectedCountry === c.code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
+                        >
+                          <img
+                            src={`/flags/${c.code}.svg`}
+                            alt={c.name}
+                            className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                          />
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -541,7 +629,6 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         {/* HERO */}
         <div className="flex flex-col lg:flex-row gap-3 mb-4">
-          {/* Category sidebar - collapsible on mobile */}
           <aside className="w-full lg:w-44 shrink-0">
             <button
               onClick={() => setMobileCategoryOpen(!mobileCategoryOpen)}
@@ -551,9 +638,7 @@ export default function HomePage() {
               <span>{mobileCategoryOpen ? "▴" : "▾"}</span>
             </button>
             <div
-              className={`bg-white rounded border border-gray-200 overflow-hidden mt-1 lg:mt-0 ${
-                mobileCategoryOpen ? "block" : "hidden lg:block"
-              }`}
+              className={`bg-white rounded border border-gray-200 overflow-hidden mt-1 lg:mt-0 ${mobileCategoryOpen ? "block" : "hidden lg:block"}`}
             >
               {[...categories, "More category"].map((cat, i) => (
                 <Link
@@ -572,17 +657,19 @@ export default function HomePage() {
             </div>
           </aside>
 
-          <div className="flex-1 bg-gradient-to-r from-teal-400 to-cyan-500 rounded overflow-hidden relative min-h-[180px] sm:min-h-[200px]">
+          <div className="flex-1 bg-gradient-to-r from-teal-400 to-cyan-500 overflow-hidden relative min-h-[280px] sm:min-h-[320px]">
             <div className="absolute inset-0">
               <img
-                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80"
+                src="/images/hero-headphones.png"
                 alt="hero"
-                className="w-full h-full object-cover opacity-40"
+                className="w-full h-full object-cover object-center"
               />
             </div>
             <div className="relative z-10 p-5 sm:p-8">
-              <p className="text-white/90 text-sm mb-1">Latest trending</p>
-              <h1 className="text-white text-2xl sm:text-3xl font-bold mb-4">
+              <p className="text-gray-700 text-sm mb-1 font-normal">
+                Latest trending
+              </p>
+              <h1 className="text-gray-900 text-2xl sm:text-3xl font-bold mb-4">
                 Electronic
                 <br />
                 items
@@ -596,7 +683,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right cards - row on mobile/tablet, column on desktop */}
           <div className="w-full lg:w-44 shrink-0 flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible">
             <div className="bg-white rounded border border-gray-200 p-3 text-center min-w-[180px] lg:min-w-0 lg:w-full shrink-0">
               <div className="flex items-center gap-2 mb-2">
@@ -835,16 +921,22 @@ export default function HomePage() {
                   setInquiry({ ...inquiry, details: e.target.value })
                 }
               />
+
               <div className="flex gap-2 mb-2">
                 <input
                   type="number"
                   placeholder="Quantity"
+                  min="1"
                   className="flex-1 border border-gray-200 rounded px-3 py-1.5 text-xs focus:outline-none"
                   value={inquiry.qty}
-                  onChange={(e) =>
-                    setInquiry({ ...inquiry, qty: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "" || parseInt(val) > 0) {
+                      setInquiry({ ...inquiry, qty: val });
+                    }
+                  }}
                 />
+
                 <select className="border border-gray-200 rounded px-2 text-xs text-gray-600">
                   <option>Pcs</option>
                   <option>Kg</option>
@@ -871,9 +963,7 @@ export default function HomePage() {
                     if (res.ok) {
                       showToast("Inquiry sent successfully!");
                       setInquiry({ item: "", details: "", qty: "" });
-                    } else {
-                      showToast(data.message || "Failed to send inquiry");
-                    }
+                    } else showToast(data.message || "Failed to send inquiry");
                   } catch {
                     showToast("Server error!");
                   }
@@ -1002,7 +1092,6 @@ export default function HomePage() {
                   />
                 </svg>,
               ];
-
               return (
                 <div
                   key={i}
@@ -1046,7 +1135,7 @@ export default function HomePage() {
                 className="flex items-center gap-2 text-xs text-gray-600 hover:text-blue-600"
               >
                 <img
-                  src={`https://flagcdn.com/w40/${["ae", "au", "us", "ru", "it", "dk", "fr", "cn", "gb", "pk"][i]}.png`}
+                  src={`/flags/${["ae", "au", "us", "ru", "it", "dk", "fr", "cn", "gb", "pk"][i]}.svg`}
                   alt={s.country}
                   className="w-6 h-4 object-cover rounded-sm shrink-0"
                 />
@@ -1092,15 +1181,11 @@ export default function HomePage() {
                     if (data.success) {
                       showToast("Successfully subscribed!");
                       setNewsletterEmail("");
-                    } else {
-                      showToast(data.message);
-                    }
+                    } else showToast(data.message);
                   } catch {
                     showToast("Server error!");
                   }
-                } else {
-                  showToast("Please enter a valid email!");
-                }
+                } else showToast("Please enter a valid email!");
               }}
               className="w-full sm:w-auto bg-blue-600 text-white px-5 py-2 rounded text-sm font-medium hover:bg-blue-700"
             >
@@ -1110,7 +1195,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* FOOTER */}
+      {/* ── FOOTER ── */}
       <footer className="bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
@@ -1126,36 +1211,42 @@ export default function HomePage() {
                 Best information about the company goes here.
               </p>
               <div className="flex gap-2">
-                {["f", "t", "in", "be", "yt"].map((s) => (
+                {[
+                  { key: "f", label: "Facebook" },
+                  { key: "t", label: "Twitter" },
+                  { key: "in", label: "LinkedIn" },
+                  { key: "be", label: "Behance" },
+                  { key: "yt", label: "YouTube" },
+                ].map((s) => (
                   <a
-                    key={s}
+                    key={s.key}
                     href="#"
-                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-6 h-6 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
+                    aria-label={s.label}
+                    className="bg-gray-100 hover:bg-blue-600 hover:text-white w-7 h-7 rounded-full flex items-center justify-center text-xs text-gray-500 transition-colors"
                   >
-                    {s}
+                    {s.key}
                   </a>
                 ))}
               </div>
             </div>
 
-            {/* Nav Columns */}
             {[
               {
                 title: "About",
                 links: [
                   { text: "About Us", path: "/about" },
                   { text: "Find Store", path: "/find-store" },
-                  { text: "Categories", path: "/categories" },
+                  { text: "Categories", path: "/products" },
                   { text: "Blogs", path: "/blogs" },
                 ],
               },
               {
-                title: "Services",
+                title: "Partnership",
                 links: [
-                  { text: "Products", path: "/products" },
-                  { text: "Hot Offers", path: "/hot-offers" },
-                  { text: "Gift Boxes", path: "/gift-boxes" },
-                  { text: "Projects", path: "/projects" },
+                  { text: "About Us", path: "/about" },
+                  { text: "Find Store", path: "/find-store" },
+                  { text: "Categories", path: "/products" },
+                  { text: "Blogs", path: "/blogs" },
                 ],
               },
               {
@@ -1178,26 +1269,24 @@ export default function HomePage() {
               },
             ].map((col) => (
               <div key={col.title}>
-                {" "}
-                <h4 className="text-sm font-semibold text-gray-800 mb-2">
-                  {" "}
-                  {col.title}{" "}
-                </h4>{" "}
+                <h4 className="text-sm font-semibold text-gray-800 mb-3">
+                  {col.title}
+                </h4>
                 {col.links.map((link) => (
                   <Link
                     key={link.text}
                     to={link.path}
-                    className="block text-xs text-gray-500 hover:text-blue-600 mb-1.5"
+                    className="block text-xs text-gray-500 hover:text-blue-600 mb-2"
                   >
-                    {" "}
-                    {link.text}{" "}
+                    {link.text}
                   </Link>
-                ))}{" "}
+                ))}
               </div>
             ))}
+
             {/* Get App */}
             <div className="col-span-2 sm:col-span-1">
-              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+              <h4 className="text-sm font-semibold text-gray-800 mb-3">
                 Get app
               </h4>
               <div className="flex flex-col gap-2">
@@ -1249,11 +1338,12 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Bottom Bar */}
           <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">
-              🇺🇸 English ▾
+              <FlagUSIcon />
+              English
+              <ChevronDownIcon />
             </div>
           </div>
         </div>
