@@ -215,7 +215,7 @@ export default function HomePage() {
   const [inquiry, setInquiry] = useState({ item: "", details: "", qty: "" });
 
   useEffect(() => {
-    fetch("${import.meta.env.VITE_API_URL}/api/products")
+    fetch(`${import.meta.env.VITE_API_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -948,7 +948,7 @@ export default function HomePage() {
                     return showToast("Please enter item name!");
                   try {
                     const res = await fetch(
-                      "${import.meta.env.VITE_API_URL}/api/inquiries/general",
+                      `${import.meta.env.VITE_API_URL}/api/inquiries/general`,
                       {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -1170,7 +1170,7 @@ export default function HomePage() {
                 if (newsletterEmail.includes("@")) {
                   try {
                     const res = await fetch(
-                      "${import.meta.env.VITE_API_URL}/api/newsletter/subscribe",
+                      `${import.meta.env.VITE_API_URL}/api/newsletter/subscribe`,
                       {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
