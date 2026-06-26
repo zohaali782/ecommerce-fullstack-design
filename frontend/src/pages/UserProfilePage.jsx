@@ -792,8 +792,8 @@ export default function UserProfilePage() {
       `${import.meta.env.VITE_API_URL}/api/orders/user/${user.id || user._id}`,
       setRealOrders,
     );
-    authFetch("${import.meta.env.VITE_API_URL}/api/wishlist", setWishlist);
-    authFetch("${import.meta.env.VITE_API_URL}/api/address", setAddresses);
+    authFetch(`${import.meta.env.VITE_API_URL}/api/wishlist`, setWishlist);
+    authFetch(`${import.meta.env.VITE_API_URL}/api/address`, setAddresses);
   }, [user, logout, navigate]);
 
   const removeFromWishlist = async (productId) => {
@@ -807,7 +807,7 @@ export default function UserProfilePage() {
 
   const handleAddAddress = async (form) => {
     const token = localStorage.getItem("nexmart_token");
-    const res = await fetch("${import.meta.env.VITE_API_URL}/api/address", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/address`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
