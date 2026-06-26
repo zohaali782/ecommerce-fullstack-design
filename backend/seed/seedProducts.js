@@ -58,9 +58,9 @@ const products = [
     subcategory: "Headphones",
     isHot: true,
     image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80",
+      "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80",
+      "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=600&q=80",
       "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=600&q=80",
     ],
     rating: 4.9,
@@ -219,9 +219,9 @@ const products = [
     subcategory: "Laptops",
     isHot: true,
     image:
-      "https://images.unsplash.com/photo-1611186871525-9b3e3a9e6dd2?w=300&q=80",
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1611186871525-9b3e3a9e6dd2?w=600&q=80",
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&q=80",
       "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80",
     ],
     rating: 4.8,
@@ -598,9 +598,8 @@ const products = [
     category: "Clothes and wear",
     subcategory: "T-Shirts",
     image:
-      "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=300&q=80",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=600&q=80",
       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80",
     ],
     rating: 4.3,
@@ -811,9 +810,9 @@ const products = [
     category: "Sports and outdoor",
     subcategory: "Fitness",
     image:
-      "https://images.unsplash.com/photo-1601925228139-e1a294b4d0e7?w=300&q=80",
+      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1601925228139-e1a294b4d0e7?w=600&q=80",
+      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80",
     ],
     rating: 4.5,
     reviews: 189,
@@ -853,9 +852,9 @@ const products = [
     category: "Sports and outdoor",
     subcategory: "Camping",
     image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=300&q=80",
+      "https://images.unsplash.com/photo-1496545672447-f699b503d270?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80",
+      "https://images.unsplash.com/photo-1496545672447-f699b503d270?w=600&q=80",
     ],
     rating: 4.6,
     reviews: 95,
@@ -897,9 +896,9 @@ const products = [
     category: "Tools, equipments",
     subcategory: "Power Tools",
     image:
-      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=300&q=80",
+      "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&q=80",
+      "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=600&q=80",
     ],
     rating: 4.5,
     reviews: 156,
@@ -939,9 +938,9 @@ const products = [
     category: "Tools, equipments",
     subcategory: "Hand Tools",
     image:
-      "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=300&q=80",
+      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1581244277943-fe4a9c777189?w=600&q=80",
+      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&q=80",
     ],
     rating: 4.4,
     reviews: 89,
@@ -1111,9 +1110,9 @@ const products = [
     category: "Machinery tools",
     subcategory: "Compressors",
     image:
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&q=80",
+      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&q=80",
+      "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&q=80",
     ],
     rating: 4.5,
     reviews: 67,
@@ -1186,9 +1185,9 @@ const products = [
     category: "Automobiles",
     subcategory: "Car Accessories",
     image:
-      "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=300&q=80",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=600&q=80",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
     ],
     rating: 4.3,
     reviews: 134,
@@ -1233,9 +1232,9 @@ const products = [
     isGift: true,
     giftOccasion: "Birthday",
     image:
-      "https://images.unsplash.com/photo-1607006344380-b6775a0824c8?w=300&q=80",
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1607006344380-b6775a0824c8?w=600&q=80",
+      "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80",
     ],
     rating: 4.8,
     reviews: 156,
@@ -1278,9 +1277,9 @@ const products = [
     isGift: true,
     giftOccasion: "Corporate",
     image:
-      "https://images.unsplash.com/photo-1606914469633-bd45b4e76440?w=300&q=80",
+      "https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1606914469633-bd45b4e76440?w=600&q=80",
+      "https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=600&q=80",
     ],
     rating: 4.7,
     reviews: 203,
@@ -1413,9 +1412,9 @@ const products = [
     isGift: true,
     giftOccasion: "Corporate",
     image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=300&q=80",
+      "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80",
+      "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=600&q=80",
     ],
     rating: 4.9,
     reviews: 267,
@@ -1548,9 +1547,9 @@ const products = [
     isGift: true,
     giftOccasion: "Baby Shower",
     image:
-      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=300&q=80",
+      "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=300&q=80",
     images: [
-      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80",
+      "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=600&q=80",
     ],
     rating: 4.9,
     reviews: 312,
