@@ -115,6 +115,30 @@ export default function CheckoutPage() {
   };
 
   const handlePlaceOrder = async () => {
+    // Validation
+    if (cartItems.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+    if (
+      !shipping.firstName ||
+      !shipping.lastName ||
+      !shipping.email ||
+      !shipping.phone ||
+      !shipping.address ||
+      !shipping.city ||
+      !shipping.country
+    ) {
+      alert("Please fill all shipping details!");
+      return;
+    }
+    if (paymentMethod === "card") {
+      if (!card.number || !card.name || !card.expiry || !card.cvv) {
+        alert("Please fill all card details!");
+        return;
+      }
+    }
+
     setLoading(true);
     const orderData = {
       items: cartItems,
