@@ -127,7 +127,7 @@ export default function CheckoutPage() {
     localStorage.setItem("lastOrder", JSON.stringify(orderData));
     try {
       const token = localStorage.getItem("nexmart_token");
-      const res = await fetch("${import.meta.env.VITE_API_URL}/api/orders", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
