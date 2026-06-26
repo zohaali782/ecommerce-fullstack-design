@@ -15,8 +15,16 @@ const inquiryRoutes = require("./routes/inquiryRoutes");
 const newsletterRoutes = require("./routes/newsletter");
 
 const app = express();
-// ... rest unchanged
-app.use(cors());
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://ecommerce-fullstack-design-pearl.vercel.app",
+    ],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 mongoose
