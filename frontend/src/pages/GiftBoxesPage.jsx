@@ -102,7 +102,7 @@ export default function GiftBoxesPage() {
       setLoading(true);
       try {
         const res = await fetch(
-          `http://localhost:5000/api/products?category=${encodeURIComponent("Gift boxes")}`,
+          `${import.meta.env.VITE_API_URL}/api/products?category=${encodeURIComponent("Gift boxes")}`,
         );
         const data = await res.json();
         setGiftBoxes(Array.isArray(data) ? data : []);

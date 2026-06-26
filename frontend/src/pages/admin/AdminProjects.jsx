@@ -35,7 +35,7 @@ export default function AdminProjects() {
 
   const loadProjects = () => {
     setLoading(true);
-    fetch("http://localhost:5000/api/projects")
+    fetch("${import.meta.env.VITE_API_URL}/api/projects")
       .then((res) => res.json())
       .then((data) => {
         setProjects(data);
@@ -175,7 +175,10 @@ export default function AdminProjects() {
               </tr>
             ) : (
               projects.map((p) => (
-                <tr key={p._id} className="border-b border-gray-100 hover:bg-gray-50">
+                <tr
+                  key={p._id}
+                  className="border-b border-gray-100 hover:bg-gray-50"
+                >
                   <td className="px-4 py-2.5 text-gray-800 font-medium max-w-[200px] truncate">
                     {p.title}
                   </td>
@@ -395,7 +398,11 @@ export default function AdminProjects() {
                   disabled={saving}
                   className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white text-sm font-medium py-2 rounded"
                 >
-                  {saving ? "Saving..." : editingId ? "Save changes" : "Add project"}
+                  {saving
+                    ? "Saving..."
+                    : editingId
+                      ? "Save changes"
+                      : "Add project"}
                 </button>
               </div>
             </form>

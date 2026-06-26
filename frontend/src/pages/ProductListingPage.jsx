@@ -229,8 +229,8 @@ export default function ProductListingPage() {
   useEffect(() => {
     let cancelled = false;
     const url = urlCategory
-      ? `http://localhost:5000/api/products?category=${encodeURIComponent(urlCategory)}`
-      : `http://localhost:5000/api/products`;
+      ? `${import.meta.env.VITE_API_URL}/api/products?category=${encodeURIComponent(urlCategory)}`
+      : `${import.meta.env.VITE_API_URL}/api/products`;
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
@@ -1063,7 +1063,10 @@ export default function ProductListingPage() {
           {!loading && totalPages > 1 && (
             <div className="flex items-center justify-center gap-1 mt-4 bg-white border border-gray-200 rounded px-4 py-2.5">
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                onClick={() => {
+                  setCurrentPage((p) => Math.max(1, p - 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 disabled={currentPage === 1}
                 className="w-7 h-7 flex items-center justify-center border border-gray-200 rounded text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-40"
               >
@@ -1073,7 +1076,10 @@ export default function ProductListingPage() {
                 (page) => (
                   <button
                     key={page}
-                    onClick={() => setCurrentPage(page)}
+                    onClick={() => {
+                      setCurrentPage(page);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
                     className={`w-7 h-7 flex items-center justify-center border rounded text-xs ${currentPage === page ? "bg-blue-600 text-white border-blue-600" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
                   >
                     {page}
@@ -1081,9 +1087,10 @@ export default function ProductListingPage() {
                 ),
               )}
               <button
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(totalPages, p + 1))
-                }
+                onClick={() => {
+                  setCurrentPage((p) => Math.min(totalPages, p + 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 disabled={currentPage === totalPages}
                 className="w-7 h-7 flex items-center justify-center border border-gray-200 rounded text-xs text-gray-600 hover:bg-gray-50 disabled:opacity-40"
               >

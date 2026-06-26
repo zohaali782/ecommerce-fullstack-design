@@ -204,7 +204,7 @@ export default function ProjectsPage() {
     setSubmitting(true);
     setFormError("");
     try {
-      await fetch("http://localhost:5000/api/inquiries", {
+      await fetch("${import.meta.env.VITE_API_URL}/api/inquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

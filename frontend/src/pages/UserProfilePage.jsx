@@ -789,16 +789,16 @@ export default function UserProfilePage() {
     };
 
     authFetch(
-      `http://localhost:5000/api/orders/user/${user.id || user._id}`,
+      `${import.meta.env.VITE_API_URL}/api/orders/user/${user.id || user._id}`,
       setRealOrders,
     );
-    authFetch("http://localhost:5000/api/wishlist", setWishlist);
-    authFetch("http://localhost:5000/api/address", setAddresses);
+    authFetch("${import.meta.env.VITE_API_URL}/api/wishlist", setWishlist);
+    authFetch("${import.meta.env.VITE_API_URL}/api/address", setAddresses);
   }, [user, logout, navigate]);
 
   const removeFromWishlist = async (productId) => {
     const token = localStorage.getItem("nexmart_token");
-    await fetch(`http://localhost:5000/api/wishlist/${productId}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/wishlist/${productId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -807,7 +807,7 @@ export default function UserProfilePage() {
 
   const handleAddAddress = async (form) => {
     const token = localStorage.getItem("nexmart_token");
-    const res = await fetch("http://localhost:5000/api/address", {
+    const res = await fetch("${import.meta.env.VITE_API_URL}/api/address", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -822,7 +822,7 @@ export default function UserProfilePage() {
 
   const handleDeleteAddress = async (id) => {
     const token = localStorage.getItem("nexmart_token");
-    await fetch(`http://localhost:5000/api/address/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/api/address/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

@@ -20,6 +20,12 @@ const countryOptions = [
   { code: "us", name: "USA" },
   { code: "ae", name: "UAE" },
 ];
+
+// ✅ FIX: Yeh teeno arrays component ke BAHAR hain — JSX ke andar nahi
+const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const colors = ["#1f2937", "#2563eb", "#ef4444", "#16a34a", "#eab308"];
+const colorNames = ["Black", "Blue", "Red", "Green", "Yellow"];
+
 function FlagUSIcon() {
   return (
     <svg
@@ -29,31 +35,20 @@ function FlagUSIcon() {
       className="inline-block mr-1"
     >
       <rect width="16" height="12" fill="#B22234" />
-      <rect y="0" width="16" height="0.923" fill="#B22234" />
       <rect y="0.923" width="16" height="0.923" fill="white" />
-      <rect y="1.846" width="16" height="0.923" fill="#B22234" />
       <rect y="2.769" width="16" height="0.923" fill="white" />
-      <rect y="3.692" width="16" height="0.923" fill="#B22234" />
       <rect y="4.615" width="16" height="0.923" fill="white" />
-      <rect y="5.538" width="16" height="0.923" fill="#B22234" />
       <rect y="6.461" width="16" height="0.923" fill="white" />
-      <rect y="7.384" width="16" height="0.923" fill="#B22234" />
       <rect y="8.307" width="16" height="0.923" fill="white" />
-      <rect y="9.230" width="16" height="0.923" fill="#B22234" />
       <rect y="10.153" width="16" height="0.923" fill="white" />
-      <rect y="11.076" width="16" height="0.923" fill="#B22234" />
       <rect width="7" height="5.538" fill="#3C3B6E" />
     </svg>
   );
 }
 
-function ChevronDownIcon() {
+function ChevronDownIcon({ className = "w-3 h-3 inline-block" }) {
   return (
-    <svg
-      className="w-3 h-3 inline-block"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-    >
+    <svg className={className} fill="currentColor" viewBox="0 0 20 20">
       <path
         fillRule="evenodd"
         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -62,6 +57,7 @@ function ChevronDownIcon() {
     </svg>
   );
 }
+
 function StarRating({ rating, count }) {
   return (
     <div className="flex items-center gap-1">
@@ -79,6 +75,142 @@ function StarRating({ rating, count }) {
         <span className="text-xs text-gray-500 ml-1">{count} reviews</span>
       )}
     </div>
+  );
+}
+
+/* ---------- Saare emoji ki jagah SVG icons ---------- */
+
+function GlobeIcon({ className = "w-3 h-3 text-blue-500 shrink-0" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a13.5 13.5 0 010 18M12 3a13.5 13.5 0 000 18" />
+    </svg>
+  );
+}
+
+function TruckIcon({ className = "w-3 h-3 text-gray-600 shrink-0" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+    </svg>
+  );
+}
+
+function PlaneIcon({ className = "w-3 h-3 text-gray-600 shrink-0" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V18l-2.5 1.5V21l3.5-1 3.5 1v-1.5L13 18v-4.5l8 2.5z" />
+    </svg>
+  );
+}
+
+function PackageIcon({ className = "w-3 h-3 text-gray-600 shrink-0" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M12 2L3 6.5v11L12 22l9-4.5v-11L12 2zm0 2.2l6.3 3.15L12 10.5 5.7 7.35 12 4.2zM5 9.2l6 3v7.4l-6-3V9.2zm14 0v7.4l-6 3V12.2l6-3z" />
+    </svg>
+  );
+}
+
+function ShieldIcon({ className = "w-3 h-3 text-blue-500 shrink-0" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+    </svg>
+  );
+}
+
+function CheckCircleIcon({ className = "w-3 h-3 text-green-500 shrink-0" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function SingleStarIcon({ className = "w-3 h-3 text-yellow-400 shrink-0" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  );
+}
+
+function MenuIcon({ className = "w-3.5 h-3.5" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  );
+}
+
+function MessageIcon({ className = "w-4 h-4" }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z" />
+      <path
+        d="M7 9h10M7 13h7"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+    </svg>
   );
 }
 
@@ -104,16 +236,22 @@ export default function ProductDetailPage() {
   const [countryOpen, setCountryOpen] = useState(false);
   const [mobileCountryOpen, setMobileCountryOpen] = useState(false);
 
+  // ✅ FIX: Send inquiry ke liye state
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [inquiryMessage, setInquiryMessage] = useState("");
+  const [sendingInquiry, setSendingInquiry] = useState(false);
+  const [inquiryToast, setInquiryToast] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     setSelectedImage(0);
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
         setLoading(false);
         fetch(
-          `http://localhost:5000/api/products?category=${encodeURIComponent(data.category)}`,
+          `${import.meta.env.VITE_API_URL}/api/products?category=${encodeURIComponent(data.category)}`,
         )
           .then((res) => res.json())
           .then((related) =>
@@ -144,13 +282,16 @@ export default function ProductDetailPage() {
       return;
     }
     if (wishlist) {
-      await fetch(`http://localhost:5000/api/wishlist/${product._id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await fetch(
+        `${import.meta.env.VITE_API_URL}/api/wishlist/${product._id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setWishlist(false);
     } else {
-      await fetch("http://localhost:5000/api/wishlist", {
+      await fetch("${import.meta.env.VITE_API_URL}/api/wishlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,10 +308,50 @@ export default function ProductDetailPage() {
     }
   };
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
+  // ✅ FIX: Pehle button ka koi onClick hi nahi tha — isliye kaam nahi kar raha tha
+  const handleOpenInquiry = () => {
+    const token = localStorage.getItem("nexmart_token");
+    if (!token) {
+      navigate("/login");
+      return;
     }
+    setInquiryMessage(
+      `Hi, I'm interested in "${product.name}". Could you share more details?`,
+    );
+    setShowInquiryModal(true);
+  };
+
+  const handleSendInquiry = async () => {
+    if (!inquiryMessage.trim()) return;
+    const token = localStorage.getItem("nexmart_token");
+    setSendingInquiry(true);
+    try {
+      await fetch("${import.meta.env.VITE_API_URL}/api/inquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          productId: product._id,
+          productName: product.name,
+          message: inquiryMessage,
+        }),
+      });
+      setShowInquiryModal(false);
+      setInquiryMessage("");
+      setInquiryToast(true);
+      setTimeout(() => setInquiryToast(false), 2500);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSendingInquiry(false);
+    }
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim())
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
   };
 
   const cartCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
@@ -201,14 +382,6 @@ export default function ProductDetailPage() {
     );
 
   const tabs = ["Description", "Reviews", "Shipping", "About seller"];
-  const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
-  const colors = [
-    "bg-gray-800",
-    "bg-blue-600",
-    "bg-red-500",
-    "bg-green-600",
-    "bg-yellow-500",
-  ];
   const prices = [
     { qty: "1-39", price: formatPrice(product.originalPrice) },
     { qty: "40-100", price: formatPrice(product.price * 1.1) },
@@ -220,27 +393,81 @@ export default function ProductDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Toast */}
       {toast && (
         <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
-          ✅ Added to cart!
+          <CheckCircleIcon className="w-4 h-4 text-white" />
+          Added to cart!
         </div>
       )}
 
-      {/* ===== NAVBAR ===== */}
+      {inquiryToast && (
+        <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 bg-blue-600 text-white px-5 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
+          <CheckCircleIcon className="w-4 h-4 text-white" />
+          Inquiry sent to seller!
+        </div>
+      )}
+
+      {/* ✅ FIX: Send inquiry modal */}
+      {showInquiryModal && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center px-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                <MessageIcon className="w-4 h-4 text-blue-600" />
+                Send inquiry to {product.brand || "seller"}
+              </h3>
+              <button
+                onClick={() => setShowInquiryModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Close"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+            <textarea
+              value={inquiryMessage}
+              onChange={(e) => setInquiryMessage(e.target.value)}
+              rows={5}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-blue-500 mb-3"
+              placeholder="Write your message to the seller..."
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowInquiryModal(false)}
+                className="flex-1 border border-gray-300 text-gray-600 text-xs font-semibold py-2 rounded hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSendInquiry}
+                disabled={sendingInquiry || !inquiryMessage.trim()}
+                className="flex-1 bg-blue-600 text-white text-xs font-semibold py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+              >
+                {sendingInquiry ? "Sending..." : "Send"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NAVBAR */}
       <header className="bg-white border-b border-gray-200 relative">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Top row */}
           <div className="flex flex-wrap items-center gap-3 py-2.5">
-            {/* Logo */}
             <Link to="/" className="flex items-center gap-2 shrink-0">
               <div className="bg-blue-600 text-white w-8 h-8 rounded flex items-center justify-center font-bold text-sm">
                 N
               </div>
               <span className="font-bold text-gray-800 text-lg">NexMart</span>
             </Link>
-
-            {/* Search bar */}
             <div className="flex flex-1 min-w-full sm:min-w-0 order-3 sm:order-none">
               <input
                 type="text"
@@ -265,10 +492,7 @@ export default function ProductDetailPage() {
                 Search
               </button>
             </div>
-
-            {/* Icons */}
             <div className="flex items-center gap-3 sm:gap-4 ml-auto">
-              {/* Profile */}
               <Link
                 to="/profile"
                 className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
@@ -283,31 +507,13 @@ export default function ProductDetailPage() {
                 </svg>
                 <span className="text-[10px]">Profile</span>
               </Link>
-
-              {/* Message */}
               <Link
                 to="/profile"
                 className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 mb-0.5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z" />
-                  <path
-                    d="M7 9h10M7 13h7"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                </svg>
+                <MessageIcon className="w-6 h-6 mb-0.5" />
                 <span className="text-[10px]">Message</span>
               </Link>
-
-              {/* Orders */}
               <Link
                 to="/profile"
                 className="hidden sm:flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors"
@@ -322,8 +528,6 @@ export default function ProductDetailPage() {
                 </svg>
                 <span className="text-[10px]">Orders</span>
               </Link>
-
-              {/* Cart */}
               <Link
                 to="/cart"
                 className="flex flex-col items-center text-gray-400 hover:text-blue-600 transition-colors relative"
@@ -345,7 +549,6 @@ export default function ProductDetailPage() {
                 </div>
                 <span className="text-[10px]">My cart</span>
               </Link>
-              {/* Hamburger - mobile only */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="sm:hidden text-gray-600 p-1"
@@ -368,14 +571,13 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* ── Desktop secondary nav ── */}
           <nav className="hidden md:flex items-center justify-between py-1.5 border-t border-gray-100">
             <div className="flex items-center gap-5">
               <Link
                 to="/products"
-                className="flex items-center gap-1 text-sm text-gray-700 hover:text-blue-600"
+                className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-blue-600"
               >
-                ☰ All category
+                <MenuIcon className="w-3.5 h-3.5" /> All category
               </Link>
               <Link
                 to="/hot-offers"
@@ -395,49 +597,21 @@ export default function ProductDetailPage() {
               >
                 Projects
               </Link>
-              {/* Help dropdown */}
               <div className="relative group">
-                <span className="text-sm text-gray-600 cursor-pointer group-hover:text-blue-600">
-                  Help ▾
+                <span className="flex items-center gap-1 text-sm text-gray-600 cursor-pointer group-hover:text-blue-600">
+                  Help <ChevronDownIcon className="w-3 h-3" />
                 </span>
                 <div className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[180px] hidden group-hover:block">
-                  {[
-                    {
-                      label: "Help Center",
-                      to: "/help",
-                      icon: (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-3.5 h-3.5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
-                          <circle cx="12" cy="17" r=".5" fill="currentColor" />
-                        </svg>
-                      ),
-                    },
-                  ].map((item) => (
-                    <Link
-                      key={item.label}
-                      to={item.to}
-                      className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                    >
-                      {item.icon}
-                      {item.label}
-                    </Link>
-                  ))}
+                  <Link
+                    to="/help"
+                    className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    Help Center
+                  </Link>
                 </div>
               </div>
             </div>
-
             <div className="flex items-center gap-4 text-sm text-gray-600">
-              {/* Currency */}
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
@@ -447,8 +621,6 @@ export default function ProductDetailPage() {
                 <option value="PKR">English, PKR</option>
                 <option value="EUR">English, EUR</option>
               </select>
-
-              {/* Ship to — desktop */}
               <div className="relative">
                 <button
                   onClick={() => setCountryOpen(!countryOpen)}
@@ -466,17 +638,7 @@ export default function ProductDetailPage() {
                         ?.name
                     }
                   </span>
-                  <svg
-                    className="w-3 h-3"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <ChevronDownIcon className="w-3 h-3" />
                 </button>
                 {countryOpen && (
                   <div className="absolute top-7 right-0 bg-white border border-gray-200 rounded shadow-lg z-50 min-w-[140px]">
@@ -503,7 +665,6 @@ export default function ProductDetailPage() {
             </div>
           </nav>
 
-          {/* ── Mobile dropdown menu ── */}
           {mobileMenuOpen && (
             <div className="sm:hidden absolute left-0 right-0 top-full bg-white border-t border-b border-gray-200 shadow-lg z-40 px-4 py-2">
               <Link
@@ -511,7 +672,7 @@ export default function ProductDetailPage() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center gap-2 text-sm text-gray-700 font-medium py-2.5 border-b border-gray-100"
               >
-                ☰ All category
+                <MenuIcon className="w-3.5 h-3.5" /> All category
               </Link>
               {[
                 { label: "Hot offers", to: "/hot-offers" },
@@ -526,11 +687,9 @@ export default function ProductDetailPage() {
                   className="flex items-center justify-between text-sm text-gray-600 py-2.5 border-b border-gray-100 hover:text-blue-600"
                 >
                   {item.label}
-                  <span className="text-gray-300">›</span>
+                  <ChevronDownIcon className="w-3 h-3 -rotate-90 text-gray-300" />
                 </Link>
               ))}
-
-              {/* Currency */}
               <div className="py-3 border-b border-gray-100">
                 <label className="text-xs text-gray-400 block mb-1">
                   Currency
@@ -545,8 +704,6 @@ export default function ProductDetailPage() {
                   <option value="EUR">English, EUR</option>
                 </select>
               </div>
-
-              {/* Ship to — mobile */}
               <div className="py-3">
                 <label className="text-xs text-gray-400 block mb-1">
                   Ship to
@@ -567,17 +724,9 @@ export default function ProductDetailPage() {
                           ?.name
                       }
                     </span>
-                    <svg
+                    <ChevronDownIcon
                       className={`w-3 h-3 text-gray-400 transition-transform ${mobileCountryOpen ? "rotate-180" : ""}`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    />
                   </button>
                   {mobileCountryOpen && (
                     <div className="absolute left-0 right-0 top-full mt-0.5 bg-white border border-gray-200 rounded shadow-lg z-50">
@@ -638,9 +787,8 @@ export default function ProductDetailPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 pb-8 w-full">
-        {/* ===== MAIN PRODUCT ===== */}
         <div className="flex flex-col md:flex-row gap-4 mb-4">
-          {/* Left — Images */}
+          {/* Left - Images */}
           <div className="w-full md:w-72 shrink-0">
             <div className="flex items-center gap-1 mb-2">
               <span
@@ -678,7 +826,7 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Middle — Info */}
+          {/* Middle - Info */}
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-semibold text-gray-800 mb-2 leading-snug">
               {product.name}
@@ -691,7 +839,6 @@ export default function ProductDetailPage() {
               </span>
             </div>
 
-            {/* Price tiers */}
             <div className="flex items-center gap-4 bg-orange-50 border border-orange-100 rounded p-3 mb-4 flex-wrap">
               {prices.map((p, i) => (
                 <div key={i} className="text-center">
@@ -705,7 +852,6 @@ export default function ProductDetailPage() {
               ))}
             </div>
 
-            {/* Specs */}
             <div className="space-y-2 mb-4">
               {[
                 { label: "Price", value: formatPrice(product.price) },
@@ -723,7 +869,7 @@ export default function ProductDetailPage() {
               ))}
             </div>
 
-            {/* Size */}
+            {/* ✅ Size - Kaam karta hai */}
             <div className="mb-3">
               <p className="text-xs text-gray-500 mb-1.5">Size:</p>
               <div className="flex gap-1.5 flex-wrap">
@@ -739,21 +885,27 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Color */}
+            {/* ✅ Color - Fixed: hex colors + name display */}
             <div className="mb-4">
-              <p className="text-xs text-gray-500 mb-1.5">Color:</p>
+              <p className="text-xs text-gray-500 mb-1.5">
+                Color:{" "}
+                <span className="text-gray-800 font-medium">
+                  {colorNames[selectedColor]}
+                </span>
+              </p>
               <div className="flex gap-2">
                 {colors.map((color, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedColor(i)}
-                    className={`w-6 h-6 rounded-full ${color} transition-transform ${selectedColor === i ? "ring-2 ring-offset-1 ring-blue-500 scale-110" : "hover:scale-110"}`}
+                    style={{ backgroundColor: color }}
+                    className={`w-6 h-6 rounded-full transition-transform ${selectedColor === i ? "ring-2 ring-offset-1 ring-blue-500 scale-110" : "hover:scale-110"}`}
                   />
                 ))}
               </div>
             </div>
 
-            {/* Mobile-only: quantity + action buttons */}
+            {/* Mobile actions */}
             <div className="md:hidden mt-4 space-y-3">
               <div className="bg-white border border-gray-200 rounded p-3">
                 <div className="flex items-center gap-2 mb-2">
@@ -771,46 +923,30 @@ export default function ProductDetailPage() {
                 </div>
                 <div className="space-y-1 mb-3">
                   <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                    <span>🌍</span> {product.shipping}
+                    <GlobeIcon /> {product.shipping}
                   </div>
                   {product.verified && (
                     <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-3 h-3 text-green-500 shrink-0"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>{" "}
-                      Verified seller
+                      <CheckCircleIcon /> Verified seller
                     </div>
                   )}
                   <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-3 h-3 text-blue-500 shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
-                    </svg>{" "}
+                    <TruckIcon className="w-3 h-3 text-blue-500 shrink-0" />{" "}
                     Fast delivery
                   </div>
                 </div>
                 <div className="flex gap-2 mb-3">
-                  <button className="flex-1 bg-blue-600 text-white text-xs font-semibold py-2 rounded hover:bg-blue-700">
+                  {/* ✅ FIX: onClick add kiya, pehle missing tha */}
+                  <button
+                    onClick={handleOpenInquiry}
+                    className="flex-1 bg-blue-600 text-white text-xs font-semibold py-2 rounded hover:bg-blue-700"
+                  >
                     Send inquiry
                   </button>
                   <button className="flex-1 border border-blue-600 text-blue-600 text-xs font-semibold py-2 rounded hover:bg-blue-50">
                     Seller's profile
                   </button>
                 </div>
-
                 <button
                   onClick={handleWishlist}
                   className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-red-500 transition-colors mb-3"
@@ -840,7 +976,6 @@ export default function ProductDetailPage() {
                   )}
                   Save for later
                 </button>
-
                 <div className="flex items-center gap-2 mb-2">
                   <div className="flex items-center border border-gray-200 rounded overflow-hidden">
                     <button
@@ -862,19 +997,10 @@ export default function ProductDetailPage() {
                     </button>
                   </div>
                 </div>
-
                 <button
                   onClick={handleAddToCart}
-                  className="w-full bg-blue-600 text-white text-xs font-semibold py-2 rounded mb-2 hover:bg-blue-700 flex items-center justify-center gap-1.5"
+                  className="w-full bg-blue-600 text-white text-xs font-semibold py-2 rounded mb-2 hover:bg-blue-700"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 h-3"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 6.9 18 9 18h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.45 5H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
-                  </svg>{" "}
                   Add to cart
                 </button>
                 <button
@@ -883,32 +1009,13 @@ export default function ProductDetailPage() {
                 >
                   Buy now
                 </button>
-
                 <div className="mt-3 space-y-1">
                   <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-3 h-3 text-green-500 shrink-0"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-                    </svg>{" "}
+                    <ShieldIcon className="w-3 h-3 text-green-500 shrink-0" />
                     Secure payment
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-3 h-3 text-blue-500 shrink-0"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>{" "}
+                    <CheckCircleIcon />
                     Buyer protection
                   </div>
                 </div>
@@ -916,7 +1023,7 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
-          {/* Right — Actions (desktop only) */}
+          {/* Right - Desktop Actions */}
           <div className="hidden md:block w-52 shrink-0">
             <div className="bg-white border border-gray-200 rounded p-3 mb-3">
               <div className="flex items-center gap-2 mb-2">
@@ -934,38 +1041,23 @@ export default function ProductDetailPage() {
               </div>
               <div className="space-y-1 mb-3">
                 <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                  <span>🌍</span> {product.shipping}
+                  <GlobeIcon /> {product.shipping}
                 </div>
                 {product.verified && (
                   <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-3 h-3 text-green-500 shrink-0"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>{" "}
-                    Verified seller
+                    <CheckCircleIcon /> Verified seller
                   </div>
                 )}
                 <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-3 h-3 text-blue-500 shrink-0"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                  >
-                    <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
-                  </svg>{" "}
-                  Fast delivery
+                  <TruckIcon className="w-3 h-3 text-blue-500 shrink-0" /> Fast
+                  delivery
                 </div>
               </div>
-              <button className="w-full bg-blue-600 text-white text-xs font-semibold py-2 rounded mb-2 hover:bg-blue-700">
+              {/* ✅ FIX: onClick add kiya, pehle missing tha — isi liye button kaam nahi kar raha tha */}
+              <button
+                onClick={handleOpenInquiry}
+                className="w-full bg-blue-600 text-white text-xs font-semibold py-2 rounded mb-2 hover:bg-blue-700"
+              >
                 Send inquiry
               </button>
               <button className="w-full border border-blue-600 text-blue-600 text-xs font-semibold py-2 rounded hover:bg-blue-50">
@@ -1003,7 +1095,6 @@ export default function ProductDetailPage() {
               Save for later
             </button>
 
-            {/* Quantity */}
             <div className="flex items-center gap-2 mb-2">
               <div className="flex items-center border border-gray-200 rounded overflow-hidden">
                 <button
@@ -1049,36 +1140,18 @@ export default function ProductDetailPage() {
 
             <div className="mt-3 space-y-1">
               <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-3 h-3 text-green-500 shrink-0"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-                </svg>{" "}
+                <ShieldIcon className="w-3 h-3 text-green-500 shrink-0" />
                 Secure payment
               </div>
               <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-3 h-3 text-blue-500 shrink-0"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>{" "}
+                <CheckCircleIcon />
                 Buyer protection
               </div>
             </div>
           </div>
         </div>
 
-        {/* ===== TABS ===== */}
+        {/* TABS */}
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="flex-1 bg-white border border-gray-200 rounded overflow-hidden">
             <div className="flex border-b border-gray-200 overflow-x-auto">
@@ -1120,18 +1193,7 @@ export default function ProductDetailPage() {
                           key={i}
                           className="flex items-start gap-2 text-xs text-gray-600"
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-3 h-3 text-green-500 mt-0.5 shrink-0"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
+                          <CheckCircleIcon className="w-3 h-3 text-green-500 mt-0.5 shrink-0" />
                           {f}
                         </div>
                       ))}
@@ -1146,25 +1208,42 @@ export default function ProductDetailPage() {
               )}
               {activeTab === "Shipping" && (
                 <div className="text-xs text-gray-600 space-y-2">
-                  <p>🚚 Standard shipping: 7-14 business days</p>
-                  <p>✈️ Express shipping: 3-5 business days</p>
-                  <p>🌍 {product.shipping}</p>
-                  <p>📦 Free shipping on orders over {formatPrice(100)}</p>
+                  <p className="flex items-center gap-1.5">
+                    <TruckIcon /> Standard shipping: 7-14 business days
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <PlaneIcon /> Express shipping: 3-5 business days
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <GlobeIcon /> {product.shipping}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <PackageIcon /> Free shipping on orders over{" "}
+                    {formatPrice(100)}
+                  </p>
                 </div>
               )}
               {activeTab === "About seller" && (
                 <div className="text-xs text-gray-600 space-y-2">
                   <p className="font-medium text-gray-800">{product.brand}</p>
-                  <p>✅ {product.verified ? "Verified seller" : "Seller"}</p>
-                  <p>⭐ {product.rating}/5 rating</p>
-                  <p>📦 {product.orders}+ orders</p>
-                  <p>🛡️ {product.warranty} warranty</p>
+                  <p className="flex items-center gap-1.5">
+                    <CheckCircleIcon />{" "}
+                    {product.verified ? "Verified seller" : "Seller"}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <SingleStarIcon /> {product.rating}/5 rating
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <PackageIcon /> {product.orders}+ orders
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <ShieldIcon /> {product.warranty} warranty
+                  </p>
                 </div>
               )}
             </div>
           </div>
 
-          {/* You may like */}
           <div className="w-full md:w-52 shrink-0">
             <div className="bg-white border border-gray-200 rounded p-3">
               <h3 className="text-sm font-semibold text-gray-800 mb-3">
@@ -1197,7 +1276,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
 
-        {/* ===== RELATED PRODUCTS ===== */}
+        {/* Related Products */}
         <div className="mb-4">
           <h2 className="text-base font-bold text-gray-800 mb-3">
             Related products
@@ -1246,7 +1325,7 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* ===== FOOTER ===== */}
+      {/* FOOTER */}
       <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
@@ -1279,7 +1358,6 @@ export default function ProductDetailPage() {
                 ))}
               </div>
             </div>
-
             {[
               {
                 title: "About",
@@ -1333,7 +1411,6 @@ export default function ProductDetailPage() {
                 ))}
               </div>
             ))}
-
             <div className="col-span-2 sm:col-span-1">
               <h4 className="text-sm font-semibold text-gray-800 mb-3">
                 Get app
@@ -1343,13 +1420,7 @@ export default function ProductDetailPage() {
                   href="#"
                   className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
                 >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="white"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
                   </svg>
                   <div className="flex flex-col">
@@ -1365,13 +1436,7 @@ export default function ProductDetailPage() {
                   href="#"
                   className="bg-black text-white rounded-lg px-3 py-2 flex items-center gap-2 hover:bg-gray-800 transition-colors w-fit"
                 >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="white"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
                     <path d="M3.18 23.76c.3.17.64.24.99.2l13.29-7.67-2.83-2.83-11.45 10.3zM.54 1.18C.2 1.56 0 2.14 0 2.89v18.22c0 .75.2 1.33.54 1.71l.09.08 10.21-10.21v-.24L.63 1.1l-.09.08zM20.94 10.8l-2.82-1.63-3.17 3.17 3.17 3.17 2.85-1.65c.81-.47.81-1.23-.03-1.7v.04zM4.17.24L17.46 7.9l-2.83 2.83L3.18.47c.35-.38.71-.41.99-.23z" />
                   </svg>
                   <div className="flex flex-col">
@@ -1386,7 +1451,6 @@ export default function ProductDetailPage() {
               </div>
             </div>
           </div>
-
           <div className="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-gray-400">© 2026 NexMart.</p>
             <div className="flex items-center gap-1 text-xs text-gray-500">

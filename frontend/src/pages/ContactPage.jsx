@@ -448,6 +448,20 @@ export default function ContactPage() {
                     to="/help"
                     className="flex items-center gap-2.5 px-4 py-2 text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600"
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-3.5 h-3.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+                      <circle cx="12" cy="17" r=".5" fill="currentColor" />
+                    </svg>
                     Help Center
                   </Link>
                 </div>
